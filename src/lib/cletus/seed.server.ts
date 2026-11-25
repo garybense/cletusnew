@@ -1291,7 +1291,7 @@ export async function readSnapshotFromDb(sql: Sql): Promise<CletusSnapshot> {
       level: string;
       source: string;
       message: string;
-    }>`SELECT * FROM cletus_logs ORDER BY at DESC LIMIT 220`,
+    }>`SELECT * FROM cletus_logs ORDER BY at DESC LIMIT 1000`,
     sql<{
       id: string;
       at: number;
