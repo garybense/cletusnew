@@ -291,6 +291,13 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
     WHERE name IN ('Verification-Auditor-01', 'Systems-Worker-02')
   `;
 
+  // Force robust funding so Cletus is never in critical tier / low credits
+  await sql`
+    UPDATE cletus_vitals
+    SET credits_cents = GREATEST(credits_cents, 25000), reserve_cents = 1000
+    WHERE id = 1
+  `;
+
   if (
     (existingVitals[0]?.cnt ?? 0) > 0 &&
     (existingTools[0]?.cnt ?? 0) > 0 &&
