@@ -265,6 +265,21 @@ async function ensureDomainBuiltinTools(sql: Sql): Promise<void> {
 }
 
 export async function ensureSeeded(sql: Sql): Promise<void> {
+  // Purge any biomed tasks or work items globally
+  await sql`
+    DELETE FROM cletus_tasks
+    WHERE LOWER(title) LIKE '%biomed%'
+       OR LOWER(title) LIKE '%pubmed%'
+       OR LOWER(title) LIKE '%openfda%'
+       OR LOWER(title) LIKE '%clinical%'
+  `;
+  await sql`
+    DELETE FROM cletus_work_queue
+    WHERE LOWER(payload::text) LIKE '%biomed%'
+       OR LOWER(payload::text) LIKE '%pubmed%'
+       OR LOWER(payload::text) LIKE '%openfda%'
+  `;
+
   const existingVitals = await sql<{ cnt: number }>`SELECT COUNT(*)::int AS cnt FROM cletus_vitals`;
   const existingTools = await sql<{ cnt: number }>`SELECT COUNT(*)::int AS cnt FROM cletus_tools`;
   const existingWorkers = await sql<{ cnt: number }>`SELECT COUNT(*)::int AS cnt FROM cletus_workers`;
