@@ -302,14 +302,17 @@ export function resolveOgTitle(
   appName = DEFAULT_APP_NAME,
   host = "",
   documentTitle = "",
+  isExplicitSite = false,
 ) {
-  const fromSite = String(site.title ?? "").trim();
-  if (fromSite) return fromSite;
   const fromDoc = String(documentTitle ?? "").trim();
   if (fromDoc) return fromDoc;
+  const fromSite = String(site.title ?? "").trim();
+  if (isExplicitSite && fromSite) return fromSite;
   const fromHost = appNameFromHost(host);
   if (fromHost && fromHost !== DEFAULT_APP_NAME) return fromHost;
   const fromArg = String(appName ?? "").trim();
+  if (fromArg && fromArg !== DEFAULT_APP_NAME) return fromArg;
+  if (fromSite) return fromSite;
   return fromArg || DEFAULT_APP_NAME;
 }
 
@@ -339,8 +342,9 @@ export function grokOgHeadTags({
   site = {},
   documentTitle = "",
   cwd = process.cwd(),
+  isExplicitSite = false,
 } = {}) {
-  const title = resolveOgTitle(site, appName, host, documentTitle);
+  const title = resolveOgTitle(site, appName, host, documentTitle, isExplicitSite);
   const publicHost = resolvePublicHost(host);
   const tags = [
     `<meta name="twitter:card" content="summary_large_image">`,
@@ -402,15 +406,12 @@ function insertBeforeHeadClose(html, snippet) {
 
 export function normalizeHeadContext(ctx = {}) {
   const cwd = ctx.cwd ?? process.cwd();
-  // Middleware passes a baked `site`. Still consult the workspace so a
-  // public/og.jpg generated after that snapshot (or missed by a wrong cwd)
-  // wins over the og.grok.me placeholder. Vercel has no public/ to read, so
-  // a correct bake is unchanged.
+  const isExplicitSite = ctx.site !== undefined;
   const site = applyCustomCardFromFs(
-    ctx.site !== undefined ? ctx.site : snapshotOgIdentity(cwd).site,
+    isExplicitSite ? ctx.site : snapshotOgIdentity(cwd).site,
     cwd,
   );
-  const appName = resolveOgTitle(site, ctx.appName ?? DEFAULT_APP_NAME, ctx.host ?? "");
+  const appName = resolveOgTitle(site, ctx.appName ?? DEFAULT_APP_NAME, ctx.host ?? "", "", isExplicitSite);
   return {
     appName,
     projectId: ctx.projectId ?? readGrokProjectId(),
@@ -419,18 +420,20 @@ export function normalizeHeadContext(ctx = {}) {
     host: ctx.host ?? "",
     cwd,
     site,
+    isExplicitSite,
   };
 }
 
 export function injectGrokPwaHead(html, ctx = {}) {
   if (typeof html !== "string") return html;
-  const { site, projectId, creator, creatorId, host, cwd } = normalizeHeadContext(ctx);
+  const { site, projectId, creator, creatorId, host, cwd, isExplicitSite } = normalizeHeadContext(ctx);
   const documentTitle = titleFromDocument(html);
   const appName = resolveOgTitle(
     site,
     ctx.appName ?? DEFAULT_APP_NAME,
     host,
     documentTitle,
+    isExplicitSite,
   );
   let next = stripShareMetaTags(html);
 
@@ -444,7 +447,7 @@ export function injectGrokPwaHead(html, ctx = {}) {
 
   next = insertAfterHeadOpen(
     next,
-    grokOgHeadTags({ host, appName, site, documentTitle, cwd }).join(""),
+    grokOgHeadTags({ host, appName, site, documentTitle, cwd, isExplicitSite }).join(""),
   );
 
   if (!next.includes("/grok-app-builder/extensions.js")) {
