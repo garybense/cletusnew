@@ -130,6 +130,7 @@ export function VoiceLivePanel() {
   const outputAudioCtxRef = useRef<AudioContext | null>(null);
   const outputAnalyserRef = useRef<AnalyserNode | null>(null);
   const boundarySignalRef = useRef<SpeechBoundarySignal>({ atMs: 0, charIndex: 0 });
+  const pendingOutputTranscriptRef = useRef<string | null>(null);
   const micStreamRef = useRef<MediaStream | null>(null);
   const processorRef = useRef<ScriptProcessorNode | null>(null);
   const nextStartTimeRef = useRef(0);
@@ -527,16 +528,20 @@ export function VoiceLivePanel() {
               setLiveState((prev) => (prev === "error" ? "error" : "idle"));
             }
           } else if (msg.type === "audio" && msg.data) {
+            pendingOutputTranscriptRef.current = null;
             playPcmChunk(msg.data, msg.mimeType);
           } else if (msg.type === "inputTranscript" && msg.text) {
             appendTranscript("operator", msg.text);
           } else if (msg.type === "outputTranscript" && msg.text) {
             appendTranscript("cletus", msg.text);
-            if (ttsNotice) {
-              speakWithBrowserFallback(msg.text);
-            }
+            pendingOutputTranscriptRef.current = msg.text;
           } else if (msg.type === "ttsUnavailable") {
-            setTtsNotice(msg.reason ?? "Server TTS unavailable; using browser speech output.");
+            const reason = msg.reason ?? "Server TTS unavailable; using browser speech output.";
+            setTtsNotice(reason);
+            if (pendingOutputTranscriptRef.current) {
+              speakWithBrowserFallback(pendingOutputTranscriptRef.current);
+              pendingOutputTranscriptRef.current = null;
+            }
           } else if (msg.type === "asrUnavailable") {
             const hasSpeechApi = Boolean(getBrowserSpeechRecognitionCtor());
             setAsrNotice(
