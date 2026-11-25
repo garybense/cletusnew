@@ -375,29 +375,32 @@ export async function runDomainConnectorAndStore(
     const memId = nid("mem");
     const tags = [input.domainId, tool.name, "live_connector"];
 
-    await sql`
-      INSERT INTO cletus_domain_memories (
-        id, domain_id, source_type, title, source_url, summary, raw_excerpt,
-        embedding_json, tags_json, created_at
-      ) VALUES (
-        ${memId}, ${input.domainId}, 'connector', ${title}, ${null},
-        ${summary}, ${excerpt}, ${embedding ? JSON.stringify(embedding) : null},
-        ${JSON.stringify(tags)}, ${now}
-      )
-    `;
+    const { shouldDiscardLogOrMemory } = await import("./memory-sanitizer");
+    if (!shouldDiscardLogOrMemory(title) && !shouldDiscardLogOrMemory(summary)) {
+      await sql`
+        INSERT INTO cletus_domain_memories (
+          id, domain_id, source_type, title, source_url, summary, raw_excerpt,
+          embedding_json, tags_json, created_at
+        ) VALUES (
+          ${memId}, ${input.domainId}, 'connector', ${title}, ${null},
+          ${summary}, ${excerpt}, ${embedding ? JSON.stringify(embedding) : null},
+          ${JSON.stringify(tags)}, ${now}
+        )
+      `;
 
-    memoryItem = {
-      id: memId,
-      domainId: input.domainId,
-      sourceType: "connector",
-      title,
-      summary,
-      rawExcerpt: excerpt,
-      hasEmbedding: Boolean(embedding && embedding.length > 0),
-      embeddingDimensions: embedding?.length,
-      tags,
-      createdAt: now,
-    };
+      memoryItem = {
+        id: memId,
+        domainId: input.domainId,
+        sourceType: "connector",
+        title,
+        summary,
+        rawExcerpt: excerpt,
+        hasEmbedding: Boolean(embedding && embedding.length > 0),
+        embeddingDimensions: embedding?.length,
+        tags,
+        createdAt: now,
+      };
+    }
   }
 
   await sql`
