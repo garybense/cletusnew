@@ -1027,12 +1027,12 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
           INSERT INTO cletus_entelechy (id, mission, risk_posture, confidence, priorities, avoid, recommendation)
           VALUES (
             1,
-            'Execute autonomous multi-agent missions through verifiable planning, tool synthesis, and capital preservation.',
+            'Execute high-speed CallRail PII audit across multi-company accounts using storage-efficient Whisper tiny transcription and regex pattern extraction.',
             'capital_preserving',
-            0.84,
-            ${JSON.stringify(["Live research-grounded planning", "Verified tool synthesis", "Reserve floor integrity"])},
-            ${JSON.stringify(["Simulated outputs", "Unverified worker attestations", "Breaching 10.00 cr reserve"])},
-            'Route research & synthesis specs via structured inter-agent handoffs and verify acceptance predicates independently.'
+            0.95,
+            ${JSON.stringify(["High-speed credential sweep and API validation", "Storage-efficient Whisper tiny transcription with immediate cleanup", "Financial PII extraction and spreadsheet reporting"])},
+            ${JSON.stringify(["Storage exhaustion from audio logs", "Unverified credential access", "Manual repetitive transcript review"])},
+            'Execute bulk account scan, stream-transcribe recordings with tiny model, purge audio temp files immediately, and compile PII audit spreadsheet.'
           ) ON CONFLICT (id) DO NOTHING
         `;
       }
