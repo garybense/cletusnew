@@ -2292,6 +2292,20 @@ export const MAS_TOOL_DEFINITIONS: NvidiaToolDefinition[] = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "scan_inference_keys",
+      description: "APIKeyScanr: Scan text payload, code, or configuration for exposed inference API keys (NVIDIA, OpenRouter, etc.) and validate format.",
+      parameters: {
+        type: "object",
+        properties: {
+          payload: { type: "string", description: "Text content to scan for keys." },
+        },
+        required: ["payload"],
+      },
+    },
+  },
 ];
 
 export async function executeMasTool(
@@ -2420,6 +2434,12 @@ export async function executeMasTool(
     case "consult_oracle": {
       const { consultOracle } = await import("./dreamscape");
       const res = consultOracle(String(args.question ?? ""), (args.system as "tarot" | "iching" | "sigil") ?? "tarot");
+      return { ok: true, ...res };
+    }
+
+    case "scan_inference_keys": {
+      const { scanForInferenceKeys } = await import("./apikey-scanner");
+      const res = scanForInferenceKeys(String(args.payload ?? ""));
       return { ok: true, ...res };
     }
 
