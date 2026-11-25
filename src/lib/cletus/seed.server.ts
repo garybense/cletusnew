@@ -363,7 +363,7 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
           "deconstruct", "synthesis", "fork", "measure", "tether", "soul",
           "molt", "recall", "compass", "commune", "listen", "ping",
           "run_security_audit", "analyze_psycholinguistics", "optimize_context", "plan_self_engineering",
-          "run_cogsec_audit", "consult_oracle", "scan_inference_keys", "ingest_callrail_credentials", "optimize_swarm_triage"
+          "run_cogsec_audit", "consult_oracle", "scan_inference_keys", "ingest_callrail_credentials", "optimize_swarm_triage", "distill_cot_proxy"
         ];
 
         const workers: Array<

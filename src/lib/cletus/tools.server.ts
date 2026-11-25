@@ -2335,6 +2335,21 @@ export const MAS_TOOL_DEFINITIONS: NvidiaToolDefinition[] = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "distill_cot_proxy",
+      description: "CoT-Proxy Distillation: Distill successful multi-agent execution traces into token-efficient policy proxies (arXiv:2611.33148).",
+      parameters: {
+        type: "object",
+        properties: {
+          taskCategory: { type: "string", description: "Category of task (e.g. callrail_pii_audit)." },
+          executionSteps: { type: "array", items: { type: "string" }, description: "Successful execution steps / chain of thought." },
+        },
+        required: ["taskCategory", "executionSteps"],
+      },
+    },
+  },
 ];
 
 export async function executeMasTool(
@@ -2481,6 +2496,13 @@ export async function executeMasTool(
     case "optimize_swarm_triage": {
       const { triageTaskComplexity } = await import("./swarm-optimization");
       const res = triageTaskComplexity(String(args.taskDescription ?? ""), typeof args.estimatedComplexity === "number" ? args.estimatedComplexity : undefined);
+      return { ok: true, ...res };
+    }
+
+    case "distill_cot_proxy": {
+      const { distillExecutionTrace } = await import("./cot-proxy");
+      const steps = Array.isArray(args.executionSteps) ? args.executionSteps.map(String) : [];
+      const res = distillExecutionTrace(String(args.taskCategory ?? "general"), steps);
       return { ok: true, ...res };
     }
 
