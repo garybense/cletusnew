@@ -1068,7 +1068,18 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
         }
       }
 
-      // Purge all low-value or superfluous domain memories (< 20 chars or test/junk)
+      // Purge superfluous / low-value thoughts, old inbox entries, and domain memories
+      await sql`
+        DELETE FROM cletus_thoughts
+        WHERE LENGTH(thinking) < 25
+           OR LOWER(thinking) LIKE '%test%'
+           OR LOWER(thinking) LIKE '%stub%'
+      `;
+      await sql`
+        DELETE FROM cletus_inbox
+        WHERE LENGTH(content) < 15
+           OR LOWER(content) LIKE '%test%'
+      `;
       await sql`
         DELETE FROM cletus_domain_memories
         WHERE LENGTH(summary) < 20
