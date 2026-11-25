@@ -2306,6 +2306,20 @@ export const MAS_TOOL_DEFINITIONS: NvidiaToolDefinition[] = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "ingest_callrail_credentials",
+      description: "CallRail SWARM: Ingest and parse callrail.txt credential inventory for multi-company PII audit.",
+      parameters: {
+        type: "object",
+        properties: {
+          rawContent: { type: "string", description: "Raw text content of callrail.txt." },
+        },
+        required: ["rawContent"],
+      },
+    },
+  },
 ];
 
 export async function executeMasTool(
@@ -2441,6 +2455,12 @@ export async function executeMasTool(
       const { scanForInferenceKeys } = await import("./apikey-scanner");
       const res = scanForInferenceKeys(String(args.payload ?? ""));
       return { ok: true, ...res };
+    }
+
+    case "ingest_callrail_credentials": {
+      const { parseCallRailCredentials } = await import("./callrail-ingest");
+      const creds = parseCallRailCredentials(String(args.rawContent ?? ""));
+      return { ok: true, totalParsed: creds.length, sample: creds.slice(0, 10) };
     }
 
     case "optimize_context": {
