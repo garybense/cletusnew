@@ -2277,6 +2277,21 @@ export const MAS_TOOL_DEFINITIONS: NvidiaToolDefinition[] = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "consult_oracle",
+      description: "Dreamscape: Consult esoteric divination systems (Thoth Tarot, I Ching, or Sigil generation) for strategic decision guidance.",
+      parameters: {
+        type: "object",
+        properties: {
+          question: { type: "string", description: "Question or strategic intent." },
+          system: { type: "string", enum: ["tarot", "iching", "sigil"], description: "Divination system." },
+        },
+        required: ["question", "system"],
+      },
+    },
+  },
 ];
 
 export async function executeMasTool(
@@ -2399,6 +2414,12 @@ export async function executeMasTool(
     case "run_cogsec_audit": {
       const { auditCognitiveSecurity } = await import("./cogsec");
       const res = auditCognitiveSecurity(String(args.targetDescription ?? ""));
+      return { ok: true, ...res };
+    }
+
+    case "consult_oracle": {
+      const { consultOracle } = await import("./dreamscape");
+      const res = consultOracle(String(args.question ?? ""), (args.system as "tarot" | "iching" | "sigil") ?? "tarot");
       return { ok: true, ...res };
     }
 
