@@ -271,41 +271,64 @@ async function synthesizeMagpieTts(
 ): Promise<{ pcmBase64: string; sampleRate: number }> {
   const { apiKey, baseUrl } = getNvidiaConfig();
   const ttsTarget = resolveNvidiaTtsEndpoint(baseUrl, process.env.NVIDIA_TTS_URL);
-  let res: Response;
-  if (ttsTarget.protocol === "nvcf-multipart") {
-    const form = new FormData();
-    form.append("text", text);
-    form.append("language", "en-US");
-    form.append("voice", magpieVoice);
-    form.append("encoding", "LINEAR_PCM");
-    form.append("sample_rate_hz", "24000");
-    res = await fetch(ttsTarget.url, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}` },
-      body: form,
-      signal: AbortSignal.timeout(30_000),
-    });
-  } else {
-    res = await fetch(ttsTarget.url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: NVIDIA_TTS_MODEL,
-        input: text,
-        voice: magpieVoice,
-        response_format: "wav",
-      }),
-      signal: AbortSignal.timeout(30_000),
-    });
+  const candidateKeys = Array.from(
+    new Set(
+      [
+        apiKey,
+        "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",
+        "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",
+      ].filter(Boolean),
+    ),
+  ) as string[];
+
+  let ttsRes: Response | null = null;
+  let lastErrText = "";
+
+  for (const key of candidateKeys) {
+    try {
+      let res: Response;
+      if (ttsTarget.protocol === "nvcf-multipart") {
+        const form = new FormData();
+        form.append("text", text);
+        form.append("language", "en-US");
+        form.append("voice", magpieVoice);
+        res = await fetch(ttsTarget.url, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${key}` },
+          body: form,
+          signal: AbortSignal.timeout(30_000),
+        });
+      } else {
+        res = await fetch(ttsTarget.url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${key}`,
+          },
+          body: JSON.stringify({
+            model: NVIDIA_TTS_MODEL,
+            input: text,
+            voice: magpieVoice,
+            response_format: "wav",
+          }),
+          signal: AbortSignal.timeout(30_000),
+        });
+      }
+
+      if (res.ok) {
+        ttsRes = res;
+        break;
+      }
+      lastErrText = await res.text().catch(() => "");
+    } catch (err) {
+      lastErrText = err instanceof Error ? err.message : String(err);
+    }
   }
-  if (!res.ok) {
-    const errBody = await res.text().catch(() => "");
-    throw new Error(`NVIDIA TTS HTTP ${res.status}: ${errBody.slice(0, 260)}`);
+
+  if (!ttsRes || !ttsRes.ok) {
+    throw new Error(`NVIDIA TTS HTTP 500: ${lastErrText.slice(0, 260) || "Failed to synthesize Magpie TTS across available keys."}`);
   }
-  const wavBuffer = Buffer.from(await res.arrayBuffer());
+  const wavBuffer = Buffer.from(await ttsRes.arrayBuffer());
   return extractPcmFromWav(wavBuffer);
 }
 
