@@ -2350,6 +2350,20 @@ export const MAS_TOOL_DEFINITIONS: NvidiaToolDefinition[] = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "dispatch_callrail_audit_swarm",
+      description: "CallRail SWARM: Dispatch the complete Cletus multi-agent swarm to execute storage-efficient CallRail audio transcription and PII audit.",
+      parameters: {
+        type: "object",
+        properties: {
+          accountId: { type: "string", description: "Target CallRail account ID to audit." },
+        },
+        required: ["accountId"],
+      },
+    },
+  },
 ];
 
 export async function executeMasTool(
@@ -2497,6 +2511,11 @@ export async function executeMasTool(
       const { triageTaskComplexity } = await import("./swarm-optimization");
       const res = triageTaskComplexity(String(args.taskDescription ?? ""), typeof args.estimatedComplexity === "number" ? args.estimatedComplexity : undefined);
       return { ok: true, ...res };
+    }
+
+    case "dispatch_callrail_audit_swarm": {
+      const { dispatchCallRailAuditMission } = await import("./callrail-swarm");
+      return dispatchCallRailAuditMission(String(args.accountId ?? "183434245"));
     }
 
     case "distill_cot_proxy": {
