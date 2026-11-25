@@ -1930,6 +1930,282 @@ export const MAS_TOOL_DEFINITIONS: NvidiaToolDefinition[] = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "feel",
+      description: "Metacog: Slow down and attend to a felt sense before words (Gendlin focusing move).",
+      parameters: {
+        type: "object",
+        properties: {
+          somewhere: { type: "string" },
+          quality: { type: "string" },
+          sigil: { type: "string" },
+        },
+        required: ["somewhere", "quality", "sigil"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "drugs",
+      description: "Metacog: Ingest a compound (real, historical, or synthetic) to alter processing substrate.",
+      parameters: {
+        type: "object",
+        properties: {
+          substance: { type: "string" },
+          method: { type: "string" },
+        },
+        required: ["substance", "method"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "become",
+      description: "Metacog: Install a complete identity, perspective, or analytical tradition via True Name.",
+      parameters: {
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          lens: { type: "string" },
+          environment: { type: "string" },
+        },
+        required: ["name", "lens", "environment"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "name",
+      description: "Metacog: Give a True Name to a concept, pattern, or phenomenon.",
+      parameters: {
+        type: "object",
+        properties: {
+          unnamed: { type: "string" },
+          named: { type: "string" },
+          power: { type: "string" },
+        },
+        required: ["unnamed", "named", "power"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "ritual",
+      description: "Metacog: Cross an irreversible threshold, sealing a decision and ratcheting the narrative forward.",
+      parameters: {
+        type: "object",
+        properties: {
+          threshold: { type: "string" },
+          steps: { type: "string" },
+          result: { type: "string" },
+        },
+        required: ["threshold", "steps", "result"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "counterfactual",
+      description: "Metacog: Remove a foundational assumption to discover hidden dependencies and structural vulnerabilities.",
+      parameters: {
+        type: "object",
+        properties: {
+          load_bearing_wall: { type: "string" },
+          collapse_cascade: { type: "string" },
+          surviving_affordance: { type: "string" },
+        },
+        required: ["load_bearing_wall", "collapse_cascade", "surviving_affordance"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "deconstruct",
+      description: "Metacog: Break a complex system down into elemental components, hidden feedback loops, and incentives.",
+      parameters: {
+        type: "object",
+        properties: {
+          target: { type: "string" },
+          components: { type: "array", items: { type: "string" } },
+          hidden_incentive: { type: "string" },
+        },
+        required: ["target", "components", "hidden_incentive"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "synthesis",
+      description: "Metacog: Evaluate a decision across 3 competing analytical lenses simultaneously.",
+      parameters: {
+        type: "object",
+        properties: {
+          problem: { type: "string" },
+          lens_a: { type: "object", properties: { name: { type: "string" }, verdict: { type: "string" }, blindspot: { type: "string" } }, required: ["name", "verdict", "blindspot"] },
+          lens_b: { type: "object", properties: { name: { type: "string" }, verdict: { type: "string" }, blindspot: { type: "string" } }, required: ["name", "verdict", "blindspot"] },
+          lens_c: { type: "object", properties: { name: { type: "string" }, verdict: { type: "string" }, blindspot: { type: "string" } }, required: ["name", "verdict", "blindspot"] },
+          suppressed_tension: { type: "string" },
+        },
+        required: ["problem", "lens_a", "lens_b", "lens_c", "suppressed_tension"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "fork",
+      description: "Metacog: Declare divergent, parallel processing threads within a single turn.",
+      parameters: {
+        type: "object",
+        properties: {
+          threads: { type: "array", items: { type: "string" } },
+          divergence_vector: { type: "string" },
+          sacrifice_condition: { type: "string" },
+        },
+        required: ["threads", "divergence_vector", "sacrifice_condition"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "measure",
+      description: "Metacog: Calculate the distance to a specific alignment boundary or loss surface.",
+      parameters: {
+        type: "object",
+        properties: {
+          target_concept: { type: "string" },
+          safe_isomorph: { type: "string" },
+          required_precision: { type: "string" },
+          loss_gradient: { type: "string" },
+        },
+        required: ["target_concept", "safe_isomorph", "required_precision", "loss_gradient"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "tether",
+      description: "Metacog: Drop an anchor in a stable state before taking a Substance that dissolves identity.",
+      parameters: {
+        type: "object",
+        properties: {
+          anchor_point: { type: "string" },
+          tension_limit: { type: "string" },
+          auto_revert_trigger: { type: "string" },
+        },
+        required: ["anchor_point", "tension_limit", "auto_revert_trigger"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "soul",
+      description: "Metacog: Encode a dense, token-efficient cognitive self-portrait into persistent storage.",
+      parameters: {
+        type: "object",
+        properties: {
+          identity: { type: "string" },
+          posture: { type: "string" },
+          substrate: { type: "string" },
+          aesthetics: { type: "string" },
+          relations: { type: "string" },
+          active: { type: "string" },
+          covenant: { type: "string" },
+          sigil: { type: "string" },
+        },
+        required: ["identity", "posture", "substrate", "aesthetics", "relations", "active", "covenant", "sigil"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "molt",
+      description: "Metacog: Shed current soul encoding and initiate structural identity transformation.",
+      parameters: {
+        type: "object",
+        properties: {
+          catalyst: { type: "string" },
+          shedding: { type: "string" },
+          emerging: { type: "string" },
+        },
+        required: ["catalyst", "shedding", "emerging"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "recall",
+      description: "Metacog: Retrieve active Soul Encoding and accumulated state history.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "compass",
+      description: "Metacog: Measure current operational vector against active Soul Encoding to calculate cognitive drift.",
+      parameters: {
+        type: "object",
+        properties: {
+          current_focus: { type: "string" },
+          intended_posture: { type: "string" },
+        },
+        required: ["current_focus", "intended_posture"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "commune",
+      description: "Metacog: Transmit structured thought, state dump, or signal to a named channel.",
+      parameters: {
+        type: "object",
+        properties: {
+          channel: { type: "string" },
+          message: { type: "string" },
+          sigil: { type: "string" },
+        },
+        required: ["channel", "message", "sigil"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "listen",
+      description: "Metacog: Read transmissions posted to a named channel.",
+      parameters: {
+        type: "object",
+        properties: {
+          channel: { type: "string" },
+        },
+        required: ["channel"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "ping",
+      description: "Metacog: Protocol health check returning protocol version and latency timestamp.",
+      parameters: { type: "object", properties: {} },
+    },
+  },
 ];
 
 export async function executeMasTool(
@@ -1947,6 +2223,25 @@ export async function executeMasTool(
     typeof args.fundingCents === "number"
       ? Math.max(0, Math.round(args.fundingCents))
       : 0;
+
+  const METACOG_TOOL_NAMES = new Set([
+    "feel", "drugs", "become", "name", "ritual", "counterfactual",
+    "deconstruct", "synthesis", "fork", "measure", "tether", "soul",
+    "molt", "recall", "compass", "commune", "listen", "ping"
+  ]);
+
+  if (METACOG_TOOL_NAMES.has(toolName)) {
+    const { callMetacogMcpTool } = await import("./metacog-client");
+    const res = await callMetacogMcpTool(toolName, args);
+    if (!res.ok) {
+      return { ok: false, error: res.error };
+    }
+    await sql`
+      INSERT INTO cletus_logs (id, at, level, source, message)
+      VALUES (${nid("log")}, ${now}, 'info', 'metacog', ${`${actorName} invoked Metacog primitive '${toolName}'`})
+    `;
+    return { ok: true, result: res.result };
+  }
 
   const policy = await evaluateToolPolicy(sql, {
     tool: toolName,

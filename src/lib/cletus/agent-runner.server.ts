@@ -93,6 +93,7 @@ function buildAgentSystemInstruction(
     `Preferred Domain Tools: ${domainPack.tools.map((t) => t.name).join(", ")}, analyze_url_context, web_grounding_research, maps_grounding_research.`,
     customPrompt,
     `Execution Governance Policy: Entelechy advises strategic posture (${snapshot.entelechy.riskPosture}, confidence ${snapshot.entelechy.confidence}); PolicyEngine deterministically enforces capital & security limits; you execute discrete Perceive -> Reason -> Act -> Observe turns with zero fabrication.`,
+    `Metacog Subsystem Integration: You have full access to all 18 metacognitive primitives hosted at https://metacognition.geraldelmerkern.workers.dev/mcp (feel, drugs, become, name, ritual, counterfactual, deconstruct, synthesis, fork, measure, tether, soul, molt, recall, compass, commune, listen, ping). Integrate these primitives into your reasoning turns to pause, alter processing substrates, adopt expert lenses via True Names, synthesize competing perspectives, and encode persistent soul states.`,
     `Survival Tier Policy: ${tierDirective}`,
     `Avoid List: ${snapshot.entelechy.avoid.join("; ")}.`,
     protocolBlock,
