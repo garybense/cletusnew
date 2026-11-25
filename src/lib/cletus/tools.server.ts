@@ -2234,6 +2234,49 @@ export const MAS_TOOL_DEFINITIONS: NvidiaToolDefinition[] = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "optimize_context",
+      description: "Context Engineering: Compress agent context, evaluate token degradation score, and generate efficiency recommendations.",
+      parameters: {
+        type: "object",
+        properties: {
+          contextText: { type: "string", description: "Raw context text or prompt payload to optimize." },
+        },
+        required: ["contextText"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "plan_self_engineering",
+      description: "Self-Engineering: Design a rigorous mutation plan and safety check for self-improving code/SWARM components.",
+      parameters: {
+        type: "object",
+        properties: {
+          componentName: { type: "string", description: "Target module or component name." },
+          goal: { type: "string", description: "Objective or improvement goal." },
+        },
+        required: ["componentName", "goal"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "run_cogsec_audit",
+      description: "CogSec: Perform cognitive security threat assessment, OSINT integrity check, and counterintelligence vulnerability scan.",
+      parameters: {
+        type: "object",
+        properties: {
+          targetDescription: { type: "string", description: "Description of the target, content, or threat environment to audit." },
+        },
+        required: ["targetDescription"],
+      },
+    },
+  },
 ];
 
 export async function executeMasTool(
@@ -2351,6 +2394,24 @@ export async function executeMasTool(
     case "analyze_psycholinguistics": {
       const { analyzePsycholinguisticFraming } = await import("./psycholinguistix");
       return analyzePsycholinguisticFraming(String(args.text ?? ""));
+    }
+
+    case "run_cogsec_audit": {
+      const { auditCognitiveSecurity } = await import("./cogsec");
+      const res = auditCognitiveSecurity(String(args.targetDescription ?? ""));
+      return { ok: true, ...res };
+    }
+
+    case "optimize_context": {
+      const { optimizeAgentContext } = await import("./self-engineer");
+      const res = optimizeAgentContext(String(args.contextText ?? ""));
+      return { ok: true, ...res };
+    }
+
+    case "plan_self_engineering": {
+      const { planSelfEngineeringMutation } = await import("./self-engineer");
+      const res = planSelfEngineeringMutation(String(args.componentName ?? "core"), String(args.goal ?? "optimize performance"));
+      return { ok: true, ...res };
     }
 
     case "query_federal_register": {

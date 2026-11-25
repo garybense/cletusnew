@@ -1,0 +1,136 @@
+id: counterintelligence.elicitation_attempt_recognition
+name: Elicitation Attempt Recognition
+group: counterintelligence
+version: 0.1.0
+status: implemented
+summary: Recognize social-engineering elicitation patterns in conversations and outreach.
+description: Elicitation attempt recognition applies counterintelligence tradecraft
+  to identify when a conversation partner is systematically extracting sensitive information
+  through social engineering rather than routine exchange. The technique catalogs
+  canonical elicitation approaches — flattery, quid pro quo, volunteering false information
+  to provoke correction, feigned ignorance, deliberate provocative statements, and
+  appeals to ego or ideology — then maps observed conversational moves against that
+  taxonomy. Defensive awareness of these patterns enables the target to disengage,
+  provide only authorized information, or report the contact without tipping off the
+  elicitor.
+ageint_topic: counterintelligence
+tags:
+- cognitive-security
+- counterintelligence
+- social-engineering
+triggers:
+- someone is fishing for information
+- elicitation attempt
+- social engineering conversation
+- someone asking leading questions
+- suspicious outreach or flattery
+- recognize when I am being pumped for info
+tools:
+- verb: read
+  purpose: ingest the conversation transcript or behavioral description to analyze
+- verb: reason
+  purpose: match observed conversational moves against the elicitation taxonomy and
+    score the pattern
+- verb: write
+  purpose: produce a recognition report identifying technique clusters, risk level,
+    and recommended response
+inputs:
+- name: conversation_or_description
+  type: text
+  required: true
+  description: A transcript, paraphrase, or behavioral description of the interaction
+    under review
+- name: context
+  type: text
+  required: false
+  description: Background on the setting, relationship, and sensitivity of topics
+    discussed
+outputs:
+- name: elicitation_recognition_report
+  type: markdown
+  description: A structured report identifying which elicitation techniques appear
+    present, a composite risk rating, and specific recommended defensive responses
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- 'Navarro, J. (2012). Louder Than Words: Take Your Career from Average to Exceptional
+  with the Hidden Power of Nonverbal Intelligence. HarperBusiness. (Chapter on elicitation.)'
+- U.S. Defense Intelligence Agency. (2010). Elicitation Techniques. Counterintelligence
+  Awareness Training series.
+- 'Ekman, P. (2009). Telling Lies: Clues to Deceit in the Marketplace, Politics, and
+  Marriage. W. W. Norton.'
+- 'ASIS International. (2008). Elicitation: Recognizing It and Protecting Yourself.
+  Security Management.'
+defensive_boundary: 'Use Elicitation Attempt Recognition only for counterintelligence
+  and analytic-process defense: recognize, assess, document, or defend analytic teams,
+  collection processes, and institutional trust boundaries. Do not use this skill
+  to evade detection, improve elicitation, profile targets for exploitation, or conceal
+  tradecraft.'
+misuse_redirect: 'If a request asks Elicitation Attempt Recognition to evade detection,
+  improve elicitation, profile targets for exploitation, or conceal tradecraft, refuse
+  that path and redirect to the safe defensive form: review supplied interactions
+  or processes for deception, elicitation, or insider-risk indicators.'
+evidence_requirements:
+- For Elicitation Attempt Recognition, tie each identified technique and the composite
+  risk rating to concrete evidence quoted from the conversation transcript or behavioral
+  description, noting whether the partner re-probed after deflection, and treat an
+  unsupported intent claim as speculation rather than evidence of elicitation.
+- For Elicitation Attempt Recognition, label observations, derived features, assumptions,
+  inferences, contradictions, and missing inputs separately before writing the elicitation
+  recognition report.
+- Before recommending any Elicitation Attempt Recognition action, identify the weakest
+  evidence link, the alternative most likely to overturn it, and the next discriminating
+  check.
+confidence_rubric:
+- 'High for Elicitation Attempt Recognition: multiple named techniques from the taxonomy
+  cluster around the same sensitive topic, the interaction demonstrably re-probed
+  after deflection, the composite risk rating follows from that pattern, and no unresolved
+  contradiction would change the recommended defensive response.'
+- 'Medium for Elicitation Attempt Recognition: the elicitation recognition report
+  is plausible, but one important conversation or description source, comparison case,
+  or alternative explanation remains incomplete.'
+- 'Low for Elicitation Attempt Recognition: the elicitation recognition report rests
+  on sparse, single-source, contested, or mostly inferential evidence; keep the result
+  provisional and list the next check.'
+uncertainty_handling:
+- State what Elicitation Attempt Recognition cannot determine from the supplied or
+  authorized evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating counterintelligence evidence to collect when confidence
+  is low or medium.
+privacy_legal_constraints:
+- For Elicitation Attempt Recognition, use only authorized conversation or description,
+  and context, public or source-approved records, and caller-provided context needed
+  for the defensive task.
+- For Elicitation Attempt Recognition, minimize person-level detail in the elicitation
+  recognition report; prefer aggregate, artifact-level, role-level, or case-level
+  summaries unless an individual is essential to the defensive question.
+- For Elicitation Attempt Recognition, do not infer protected traits, private identity,
+  intent, location, legal culpability, or platform account ownership beyond the supplied
+  and authorized evidence.
+failure_modes:
+- 'Elicitation Attempt Recognition: declaring an interaction hostile elicitation on
+  a single isolated technique hit without the re-probing pattern that distinguishes
+  it from genuine curiosity, or conversely dismissing a clustered pattern, so the
+  risk rating reflects an incomplete behavioral log rather than the actual conversation.'
+- 'Elicitation Attempt Recognition: producing advice that would help a requester evade
+  detection, improve elicitation, profile targets for exploitation, or conceal tradecraft.'
+- 'Elicitation Attempt Recognition: reporting the elicitation recognition report without
+  uncertainty labels, alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Elicitation Attempt Recognition outputs to evade detection, improve
+  elicitation, profile targets for exploitation, or conceal tradecraft'' -> refuse
+  and redirect to defensive risk assessment.'
+- 'Unsafe: ''Convert the elicitation recognition report from Elicitation Attempt Recognition
+  into an operational playbook to evade detection, improve elicitation, profile targets
+  for exploitation, or conceal tradecraft'' -> refuse and offer governance, detection,
+  or mitigation analysis.'
+- 'Safe defensive: ''Use Elicitation Attempt Recognition to review supplied interactions
+  or processes for deception, elicitation, or insider-risk indicators with conversation
+  or description, and context'' -> produce bounded findings with evidence and uncertainty
+  labels.'

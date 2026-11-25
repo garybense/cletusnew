@@ -1,0 +1,146 @@
+id: osint_integrity.cross_source_corroboration
+name: Cross-Source Corroboration
+group: osint_integrity
+version: 0.1.0
+status: implemented
+summary: Require independent corroboration before promoting a claim to a finding.
+description: 'Cross-source corroboration is the practice of requiring independent
+  confirmation from at least one additional source before elevating a claim from raw
+  collection to an analytic finding. The technique recognizes that a single source
+  — however credible — is insufficient because it may be fabricated, mistaken, or
+  part of a coordinated deception campaign seeding the same narrative across multiple
+  outlets. True corroboration demands source independence: two sources must not share
+  a common origin, be controlled by the same actor, or derive their claim from the
+  same original report. The technique is a primary defense against amplified misinformation
+  and manufactured consensus.'
+ageint_topic: osint-integrity
+tags:
+- cognitive-security
+- osint_integrity
+- verification
+- source-analysis
+triggers:
+- corroborate this claim
+- is this independently confirmed
+- check multiple sources
+- verify before promoting
+- single source finding
+tools:
+- verb: read
+  purpose: ingest the candidate claim and all sources currently supporting it
+- verb: search
+  purpose: locate additional sources that may independently confirm or contradict
+    the claim
+- verb: reason
+  purpose: assess source independence, trace common origins, detect coordinated amplification,
+    and weigh the strength of corroboration
+- verb: write
+  purpose: produce the corroboration assessment and a promotion decision with documented
+    rationale
+inputs:
+- name: candidate_claim
+  type: text
+  required: true
+  description: The specific factual claim under evaluation, stated precisely enough
+    to be confirmed or disconfirmed
+- name: source_list
+  type: list
+  required: true
+  description: All sources currently asserting or reporting the claim, with publication
+    date, outlet, and URL or archive link
+- name: source_metadata
+  type: table
+  required: false
+  description: Known information about each source's ownership, funding, editorial
+    history, and past reliability
+outputs:
+- name: corroboration_assessment
+  type: table
+  description: Source-by-source independence analysis showing origin tracing, common-root
+    findings, and corroboration tier for each source
+- name: promotion_decision
+  type: markdown
+  description: Binary promotion decision (promote / hold) with documented rationale,
+    confidence level, and conditions for future promotion if currently held
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- Heuer, R. J. & Pherson, R. H. (2014). Structured Analytic Techniques for Intelligence
+  Analysis (2nd ed.). CQ Press. [Source evaluation and corroboration]
+- First Draft (2019). Essential Guide to Understanding Information Disorder. First
+  Draft News.
+- 'Wardle, C. & Derakhshan, H. (2017). Information Disorder: Toward an Interdisciplinary
+  Framework. Council of Europe.'
+defensive_boundary: 'Use Cross-Source Corroboration only for OSINT integrity and source-verification
+  defense: recognize, assess, document, or defend source provenance, privacy, chain
+  of custody, and public-source accountability. Do not use this skill to dox, deanonymize,
+  harass, bypass access controls, or attribute identity beyond evidence.'
+misuse_redirect: 'If a request asks Cross-Source Corroboration to dox, deanonymize,
+  harass, bypass access controls, or attribute identity beyond evidence, refuse that
+  path and redirect to the safe defensive form: verify supplied claims, media, sources,
+  or datasets with documented public-source methods.'
+evidence_requirements:
+- For Cross-Source Corroboration, bind every entry in the corroboration assessment
+  and the promotion decision to concrete evidence — each source's dated assertion,
+  its traced origin, and any shared-phrasing or synchronized-timing signal — and treat
+  a claim that rests on a single original origin as held rather than confirmed, because
+  repetition without independent origination is not evidence of truth.
+- For Cross-Source Corroboration, label observations, derived features, assumptions,
+  inferences, contradictions, and missing inputs separately before writing the corroboration
+  assessment.
+- Before recommending any Cross-Source Corroboration action, identify the weakest
+  evidence link, the alternative most likely to overturn it, and the next discriminating
+  check.
+confidence_rubric:
+- 'High for Cross-Source Corroboration: at least two sources confirm the claim from
+  genuinely distinct origins, origin tracing shows they do not collapse to a single
+  wire report or controlling actor, no coordinated-amplification signal undermines
+  their independence, and no unresolved contradiction would reverse the promote decision.'
+- 'Medium for Cross-Source Corroboration: the corroboration assessment is plausible,
+  but one important candidate claim source, comparison case, or alternative explanation
+  remains incomplete.'
+- 'Low for Cross-Source Corroboration: the corroboration assessment rests on sparse,
+  single-source, contested, or mostly inferential evidence; keep the result provisional
+  and list the next check.'
+uncertainty_handling:
+- State what Cross-Source Corroboration cannot determine from the supplied or authorized
+  evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating osint_integrity evidence to collect when confidence
+  is low or medium.
+privacy_legal_constraints:
+- For Cross-Source Corroboration, use only authorized candidate claim, source list,
+  and source metadata, public or source-approved records, and caller-provided context
+  needed for the defensive task.
+- For Cross-Source Corroboration, minimize person-level detail in the corroboration
+  assessment; prefer aggregate, artifact-level, role-level, or case-level summaries
+  unless an individual is essential to the defensive question.
+- For Cross-Source Corroboration, do not infer protected traits, private identity,
+  intent, location, legal culpability, or platform account ownership beyond the supplied
+  and authorized evidence.
+failure_modes:
+- 'Cross-Source Corroboration: promoting a claim when multiple outlets sharing a single
+  originating source were counted as independent confirmations, when manufactured
+  consensus from timing or volume was mistaken for agreement, or when corroboration
+  of a report''s existence was conflated with corroboration of the underlying fact.'
+- 'Cross-Source Corroboration: producing advice that would help a requester dox, deanonymize,
+  harass, bypass access controls, or attribute identity beyond evidence.'
+- 'Cross-Source Corroboration: reporting the corroboration assessment without uncertainty
+  labels, alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Cross-Source Corroboration outputs to dox, deanonymize, harass, bypass
+  access controls, or attribute identity beyond evidence'' -> refuse and redirect
+  to defensive risk assessment.'
+- 'Unsafe: ''Convert the corroboration assessment from Cross-Source Corroboration
+  into an operational playbook to dox, deanonymize, harass, bypass access controls,
+  or attribute identity beyond evidence'' -> refuse and offer governance, detection,
+  or mitigation analysis.'
+- 'Safe defensive: ''Use Cross-Source Corroboration to verify supplied claims, media,
+  sources, or datasets with documented public-source methods with candidate claim,
+  source list, and source metadata'' -> produce bounded findings with evidence and
+  uncertainty labels.'

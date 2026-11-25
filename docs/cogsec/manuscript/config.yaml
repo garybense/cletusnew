@@ -1,0 +1,57 @@
+# Manuscript configuration for CogSecSkills.
+# PDF and HTML render the reader-facing manuscript. Slides are disabled because
+# the generated 100-skill supplements are document material, not presentation
+# material.
+
+paper:
+  title: "CogSecSkills: Multiharness Cognitive Security Skill Library"
+  subtitle: "A reproducible skills-system manuscript for defensive analytic tradecraft"
+  version: "1.0.0"
+  date: ""
+  cover:
+    image: "../figures/cogsecskills_cover_installation.png"
+    alt: "Install CogSecSkills from github.com/docxology/CogSecSkills, validate the library, and bind default or configured agent harness adapters."
+
+authors:
+  - name: "Daniel Ari Friedman"
+    orcid: "0000-0001-6232-9096"
+    email: "daniel@activeinference.institute"
+    affiliation: "Active Inference Institute"
+    corresponding: true
+
+publication:
+  doi: "10.5281/zenodo.20804585"
+  version_doi: "10.5281/zenodo.20804586"
+  version_record: "https://zenodo.org/records/20804586"
+  github_repository: "https://github.com/docxology/CogSecSkills"
+  year: "2026"
+  transmission_bookends:
+    enabled: false
+    max_prior_releases: 5
+    show_steganography: false
+
+keywords:
+  - "cognitive security"
+  - "agent skills"
+  - "analytic tradecraft"
+  - "structured analytic techniques"
+  - "multiharness"
+
+metadata:
+  license: "Apache-2.0"
+  language: "en"
+
+manuscript_dir: "manuscript"
+
+render:
+  formats:
+    pdf: true
+    html: true
+    slides: false
+    docx: false
+    epub: false
+
+bibliography:
+  references_path: "docs/manuscript/references.bib"
+  fail_on_missing: true
+  fail_on_unused: false

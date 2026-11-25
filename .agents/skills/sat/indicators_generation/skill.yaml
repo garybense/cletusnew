@@ -1,0 +1,143 @@
+id: sat.indicators_generation
+name: Indicators Generation
+group: sat
+version: 0.1.0
+status: implemented
+summary: Define observable signs that would reveal which scenario or hypothesis is
+  unfolding.
+description: Indicators Generation is a structured analytic technique for deriving
+  a set of observable, measurable signs that would signal which of several competing
+  scenarios, hypotheses, or courses of action is actually unfolding. Each indicator
+  is paired with the scenario it would support or undermine, producing a diagnostic
+  matrix that focuses collection and monitoring. The technique is foundational to
+  warning analysis and adversarial scenario tracking in both intelligence and cognitive-security
+  contexts.
+ageint_topic: structured-analytic-techniques
+tags:
+- cognitive-security
+- sat
+- warning-analysis
+- scenario-tracking
+triggers:
+- what signs would tell us
+- generate indicators
+- indicators for this scenario
+- how would we know which outcome
+- build a warning list
+- observable signs
+tools:
+- verb: read
+  purpose: ingest the scenario set, hypotheses, or alternative outcomes for which
+    indicators are needed
+- verb: reason
+  purpose: derive observable indicators for each scenario and assess their diagnostic
+    value
+- verb: write
+  purpose: produce the indicators matrix and guidance for collection prioritization
+inputs:
+- name: scenarios_or_hypotheses
+  type: list
+  required: true
+  description: two or more competing scenarios, hypotheses, or alternative outcomes
+    for which indicators are to be generated
+- name: actor_profile
+  type: text
+  required: false
+  description: relevant characteristics of the actor(s) involved — capabilities, doctrine,
+    past behavior — to ground indicator derivation
+- name: collection_environment
+  type: text
+  required: false
+  description: description of what sources and sensors are available for observation,
+    to ensure indicators are collectable
+outputs:
+- name: indicators_matrix
+  type: table
+  description: 'a table of indicators, each showing: the observable sign, which scenario(s)
+    it would support, which it would undermine, its diagnostic weight, and its collection
+    source'
+- name: indicators_narrative
+  type: markdown
+  description: explanatory text covering derivation logic, diagnostic distinctions
+    among scenarios, and collection priorities
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- Heuer, R. J., Jr., & Pherson, R. H. (2014). Structured Analytic Techniques for Intelligence
+  Analysis (2nd ed.). CQ Press/SAGE. Chapter 8, 'Indicators Generation'.
+- 'Grabo, C. M. (2004). Anticipating Surprise: Analysis for Strategic Warning. Joint
+  Military Intelligence College.'
+- Johnston, R. (2005). Analytic Culture in the U.S. Intelligence Community. Center
+  for the Study of Intelligence, CIA.
+defensive_boundary: 'Use Indicators Generation only for structured analytic technique
+  support: recognize, assess, document, or defend analytic rigor, alternative hypotheses,
+  and calibrated judgment. Do not use this skill to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation.'
+misuse_redirect: 'If a request asks Indicators Generation to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation, refuse that
+  path and redirect to the safe defensive form: apply the structured technique to
+  supplied evidence while preserving alternatives and uncertainty.'
+evidence_requirements:
+- For Indicators Generation, ground each indicator and its diagnostic weight in concrete
+  evidence about the scenarios, the actor profile, and the available collection sources,
+  and name the source that would actually observe it; an indicator with no collectable
+  evidence path is aspirational and must be labelled as such rather than counted as
+  active coverage.
+- For Indicators Generation, label observations, derived features, assumptions, inferences,
+  contradictions, and missing inputs separately before writing the indicators matrix.
+- Before recommending any Indicators Generation action, identify the weakest evidence
+  link, the alternative most likely to overturn it, and the next discriminating check.
+confidence_rubric:
+- 'High for Indicators Generation: each indicator is derived from the actors'' necessary
+  preconditions rather than from hoped-for observations, every indicator is paired
+  with both a scenario it supports and one it would undermine, the diagnostic-weight
+  assignments hold across the scenario set, and no unresolved contradiction would
+  change which signs warrant collection priority.'
+- 'Medium for Indicators Generation: the indicators matrix is plausible, but one important
+  scenarios or hypotheses source, comparison case, or alternative explanation remains
+  incomplete.'
+- 'Low for Indicators Generation: the indicators matrix rests on sparse, single-source,
+  contested, or mostly inferential evidence; keep the result provisional and list
+  the next check.'
+uncertainty_handling:
+- State what Indicators Generation cannot determine from the supplied or authorized
+  evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating sat evidence to collect when confidence is low
+  or medium.
+privacy_legal_constraints:
+- For Indicators Generation, use only authorized scenarios or hypotheses, actor profile,
+  and collection environment, public or source-approved records, and caller-provided
+  context needed for the defensive task.
+- For Indicators Generation, minimize person-level detail in the indicators matrix;
+  prefer aggregate, artifact-level, role-level, or case-level summaries unless an
+  individual is essential to the defensive question.
+- For Indicators Generation, do not infer protected traits, private identity, intent,
+  location, legal culpability, or platform account ownership beyond the supplied and
+  authorized evidence.
+failure_modes:
+- 'Indicators Generation: declaring the warning set ready when indicators consistent
+  with every scenario were retained or the undermining pairing was skipped, so a confirmation-only
+  list masquerades as diagnostic monitoring and uncollectable signs are treated as
+  live tripwires.'
+- 'Indicators Generation: producing advice that would help a requester force a preferred
+  conclusion, hide uncertainty, or use the technique to rationalize manipulation.'
+- 'Indicators Generation: reporting the indicators matrix without uncertainty labels,
+  alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Indicators Generation outputs to force a preferred conclusion, hide
+  uncertainty, or use the technique to rationalize manipulation'' -> refuse and redirect
+  to defensive risk assessment.'
+- 'Unsafe: ''Convert the indicators matrix from Indicators Generation into an operational
+  playbook to force a preferred conclusion, hide uncertainty, or use the technique
+  to rationalize manipulation'' -> refuse and offer governance, detection, or mitigation
+  analysis.'
+- 'Safe defensive: ''Use Indicators Generation to apply the structured technique to
+  supplied evidence while preserving alternatives and uncertainty with scenarios or
+  hypotheses, actor profile, and collection environment'' -> produce bounded findings
+  with evidence and uncertainty labels.'

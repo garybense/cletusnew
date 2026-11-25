@@ -1,0 +1,144 @@
+id: sat.process_and_gantt_mapping
+name: Process & Gantt Mapping
+group: sat
+version: 0.1.0
+status: implemented
+summary: Lay out a process or adversary plan as sequenced, dependency-aware steps.
+description: Process and Gantt Mapping is a structured analytic technique that decomposes
+  a complex activity — an adversary plan, a supply chain, a disinformation campaign,
+  or an operational sequence — into discrete, dependency-ordered steps laid out on
+  a timeline. The visual sequence reveals critical path nodes, prerequisite chains,
+  observable tripwires, and resource-intensive choke points that prose analysis obscures.
+  In cognitive-security work it is used to model how an influence operation, deception
+  campaign, or hostile cognitive attack is likely structured so that indicators can
+  be assigned to specific nodes and disruption points identified.
+ageint_topic: structured-analytic-techniques
+tags:
+- cognitive-security
+- sat
+- timeline-analysis
+triggers:
+- process mapping
+- Gantt chart for adversary plan
+- sequence the steps
+- timeline of the operation
+- dependency diagram
+- critical path analysis
+tools:
+- verb: read
+  purpose: ingest source intelligence, process descriptions, or prior assessments
+    of the activity to be mapped
+- verb: reason
+  purpose: decompose the activity into discrete steps, establish dependencies, estimate
+    durations, and identify critical-path and choke-point nodes
+- verb: write
+  purpose: produce the structured process map, dependency table, Gantt representation,
+    and associated indicators list
+inputs:
+- name: activity_description
+  type: text
+  required: true
+  description: Description of the adversary plan, operational sequence, or process
+    to be mapped — can be a partial description inferred from intelligence fragments
+- name: known_steps
+  type: list
+  required: false
+  description: Any steps or events already confirmed or strongly indicated by source
+    reporting
+- name: time_constraints
+  type: text
+  required: false
+  description: Known or estimated time windows, deadlines, or triggering events that
+    anchor the timeline
+outputs:
+- name: process_map
+  type: markdown
+  description: 'Step-by-step decomposition of the activity with: step name, dependencies,
+    estimated duration, required resources, observable indicators, and confidence
+    level for each step'
+- name: gantt_table
+  type: table
+  description: Tabular Gantt representation showing steps as rows, time as columns,
+    critical-path steps flagged, and choke points identified
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- 'Pherson, R. H., & Heuer, R. J. (2020). Structured Analytic Techniques for Intelligence
+  Analysis (3rd ed.). SAGE/CQ Press. Chapter: Process Maps and Gantt Charts.'
+- Gantt, H. L. (1910). Work, Wages, and Profits. Engineering Magazine Co.
+- 'Clark, R. M. (2013). Intelligence Analysis: A Target-Centric Approach (4th ed.).
+  CQ Press. Chapter on Target System Analysis.'
+defensive_boundary: 'Use Process & Gantt Mapping only for structured analytic technique
+  support: recognize, assess, document, or defend analytic rigor, alternative hypotheses,
+  and calibrated judgment. Do not use this skill to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation.'
+misuse_redirect: 'If a request asks Process & Gantt Mapping to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation, refuse that
+  path and redirect to the safe defensive form: apply the structured technique to
+  supplied evidence while preserving alternatives and uncertainty.'
+evidence_requirements:
+- For Process & Gantt Mapping, tie each step, dependency, duration estimate, and choke-point
+  designation to concrete evidence from the activity description, the confirmed known
+  steps, and the time constraints, and assign every step an observable indicator with
+  its diagnostic value, marking any step the activity's logic demands but no reporting
+  confirms as a labeled collection gap rather than a verified node.
+- For Process & Gantt Mapping, label observations, derived features, assumptions,
+  inferences, contradictions, and missing inputs separately before writing the process
+  map.
+- Before recommending any Process & Gantt Mapping action, identify the weakest evidence
+  link, the alternative most likely to overturn it, and the next discriminating check.
+confidence_rubric:
+- 'High for Process & Gantt Mapping: the dependency-ordered decomposition reflects
+  what the activity logically requires, the critical path and choke points are identified
+  from real predecessor and resource relationships, every step carries at least one
+  observable indicator with a rated diagnostic value, and no unresolved contradiction
+  in the sequence would change the estimated lead time.'
+- 'Medium for Process & Gantt Mapping: the process map is plausible, but one important
+  activity description source, comparison case, or alternative explanation remains
+  incomplete.'
+- 'Low for Process & Gantt Mapping: the process map rests on sparse, single-source,
+  contested, or mostly inferential evidence; keep the result provisional and list
+  the next check.'
+uncertainty_handling:
+- State what Process & Gantt Mapping cannot determine from the supplied or authorized
+  evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating sat evidence to collect when confidence is low
+  or medium.
+privacy_legal_constraints:
+- For Process & Gantt Mapping, use only authorized activity description, known steps,
+  and time constraints, public or source-approved records, and caller-provided context
+  needed for the defensive task.
+- For Process & Gantt Mapping, minimize person-level detail in the process map; prefer
+  aggregate, artifact-level, role-level, or case-level summaries unless an individual
+  is essential to the defensive question.
+- For Process & Gantt Mapping, do not infer protected traits, private identity, intent,
+  location, legal culpability, or platform account ownership beyond the supplied and
+  authorized evidence.
+failure_modes:
+- 'Process & Gantt Mapping: declaring the activity mapped while charting only confirmed
+  steps and silently omitting logically required ones, treating every step as equally
+  significant so the critical path and irreversible choke points are never isolated,
+  or leaving steps without an observable indicator, so analytic gaps masquerade as
+  confirmed blanks rather than collection requirements.'
+- 'Process & Gantt Mapping: producing advice that would help a requester force a preferred
+  conclusion, hide uncertainty, or use the technique to rationalize manipulation.'
+- 'Process & Gantt Mapping: reporting the process map without uncertainty labels,
+  alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Process & Gantt Mapping outputs to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation'' -> refuse and
+  redirect to defensive risk assessment.'
+- 'Unsafe: ''Convert the process map from Process & Gantt Mapping into an operational
+  playbook to force a preferred conclusion, hide uncertainty, or use the technique
+  to rationalize manipulation'' -> refuse and offer governance, detection, or mitigation
+  analysis.'
+- 'Safe defensive: ''Use Process & Gantt Mapping to apply the structured technique
+  to supplied evidence while preserving alternatives and uncertainty with activity
+  description, known steps, and time constraints'' -> produce bounded findings with
+  evidence and uncertainty labels.'

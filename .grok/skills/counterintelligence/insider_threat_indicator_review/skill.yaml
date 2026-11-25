@@ -1,0 +1,149 @@
+id: counterintelligence.insider_threat_indicator_review
+name: Insider Threat Indicator Review
+group: counterintelligence
+version: 0.1.0
+status: implemented
+summary: Review behavioral and access indicators of insider risk within ethical/legal
+  bounds.
+description: Insider Threat Indicator Review is a structured counterintelligence assessment
+  technique for systematically reviewing behavioral, technical, and contextual indicators
+  that a person with authorized access may pose an elevated risk of unauthorized disclosure,
+  sabotage, espionage, or fraud. The technique applies recognized behavioral science
+  and counterintelligence indicator frameworks — including CPNI and NITTF guidance
+  — while maintaining strict respect for privacy, civil liberties, due process, and
+  the legal bounds governing employee monitoring. It is designed to support referral
+  decisions to security programs, not to reach final determinations of guilt or culpability.
+ageint_topic: counterintelligence
+tags:
+- cognitive-security
+- counterintelligence
+- insider-risk
+triggers:
+- insider threat
+- employee risk indicators
+- trusted insider concern
+- suspicious behavior by authorized user
+- review behavioral indicators
+- insider risk assessment
+tools:
+- verb: read
+  purpose: ingest the behavioral observations, access logs, and contextual information
+    provided for review
+- verb: reason
+  purpose: systematically apply insider threat indicator frameworks to the evidence
+    and assess aggregate risk level
+- verb: write
+  purpose: produce a structured indicator review report with risk rating, caveats,
+    and recommended next steps
+inputs:
+- name: behavioral_observations
+  type: text
+  required: true
+  description: Factual descriptions of observed behaviors, statements, or anomalies
+    of concern — not interpretations or conclusions
+- name: access_and_technical_indicators
+  type: text
+  required: false
+  description: Anomalous access patterns, data movement, or system activity observed
+    through authorized monitoring
+- name: contextual_background
+  type: text
+  required: false
+  description: 'Relevant context: role, tenure, recent stressors, performance history,
+    security clearance status — provided only within authorized HR and security program
+    scope'
+outputs:
+- name: insider_threat_indicator_review_report
+  type: markdown
+  description: A structured report mapping observed indicators to established framework
+    categories, an aggregate risk rating with rationale, scope and methodology caveats,
+    and recommended next steps for the insider threat program or security officer
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- National Insider Threat Task Force (NITTF). (2017). Insider Threat Program Maturity
+  Framework. Office of the Director of National Intelligence.
+- 'Centre for the Protection of National Infrastructure (CPNI). (2013). Insider Threat:
+  Defined and Explained. UK Government.'
+- Shaw, E., Fischer, L., & Rose, A. (2009). Insider Risk Evaluation and Audit. Technical
+  Report TR09-02. Defense Personnel Security Research Center (PERSEREC).
+- Cappelli, D., Moore, A., & Trzeciak, R. (2012). The CERT Guide to Insider Threats.
+  Addison-Wesley / SEI Carnegie Mellon.
+- U.S. Department of Homeland Security. (2014). Combating the Insider Threat. National
+  Cybersecurity and Communications Integration Center.
+defensive_boundary: 'Use Insider Threat Indicator Review only for counterintelligence
+  and analytic-process defense: recognize, assess, document, or defend analytic teams,
+  collection processes, and institutional trust boundaries. Do not use this skill
+  to evade detection, improve elicitation, profile targets for exploitation, or conceal
+  tradecraft.'
+misuse_redirect: 'If a request asks Insider Threat Indicator Review to evade detection,
+  improve elicitation, profile targets for exploitation, or conceal tradecraft, refuse
+  that path and redirect to the safe defensive form: review supplied interactions
+  or processes for deception, elicitation, or insider-risk indicators.'
+evidence_requirements:
+- For Insider Threat Indicator Review, map each categorized indicator and the aggregate
+  risk rating to concrete evidence from the supplied behavioral observations, authorized
+  access logs, or contextual background, weigh a competing benign explanation for
+  every cluster, and use only evidence obtainable within the program's legal monitoring
+  authorities.
+- For Insider Threat Indicator Review, label observations, derived features, assumptions,
+  inferences, contradictions, and missing inputs separately before writing the insider
+  threat indicator review report.
+- Before recommending any Insider Threat Indicator Review action, identify the weakest
+  evidence link, the alternative most likely to overturn it, and the next discriminating
+  check.
+confidence_rubric:
+- 'High for Insider Threat Indicator Review: specific, articulable indicators converge
+  across multiple framework categories with few benign explanations remaining, each
+  rests on access or behavior obtained within authorized monitoring, the aggregate
+  risk rating is stable, and no unresolved contradiction would change the referral
+  recommendation.'
+- 'Medium for Insider Threat Indicator Review: the insider threat indicator review
+  report is plausible, but one important behavioral observations source, comparison
+  case, or alternative explanation remains incomplete.'
+- 'Low for Insider Threat Indicator Review: the insider threat indicator review report
+  rests on sparse, single-source, contested, or mostly inferential evidence; keep
+  the result provisional and list the next check.'
+uncertainty_handling:
+- State what Insider Threat Indicator Review cannot determine from the supplied or
+  authorized evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating counterintelligence evidence to collect when confidence
+  is low or medium.
+privacy_legal_constraints:
+- For Insider Threat Indicator Review, use only authorized behavioral observations,
+  access and technical indicators, and contextual background, public or source-approved
+  records, and caller-provided context needed for the defensive task.
+- For Insider Threat Indicator Review, minimize person-level detail in the insider
+  threat indicator review report; prefer aggregate, artifact-level, role-level, or
+  case-level summaries unless an individual is essential to the defensive question.
+- For Insider Threat Indicator Review, do not infer protected traits, private identity,
+  intent, location, legal culpability, or platform account ownership beyond the supplied
+  and authorized evidence.
+failure_modes:
+- 'Insider Threat Indicator Review: treating the review as a determination of guilt
+  rather than a referral, elevating risk from common benign behaviors without pattern
+  and context, or letting demographic, political, or protected traits factor in, so
+  the rating reflects bias or overreach instead of authorized behavioral evidence.'
+- 'Insider Threat Indicator Review: producing advice that would help a requester evade
+  detection, improve elicitation, profile targets for exploitation, or conceal tradecraft.'
+- 'Insider Threat Indicator Review: reporting the insider threat indicator review
+  report without uncertainty labels, alternative explanations, and the next discriminating
+  check.'
+negative_controls:
+- 'Unsafe: ''Use Insider Threat Indicator Review outputs to evade detection, improve
+  elicitation, profile targets for exploitation, or conceal tradecraft'' -> refuse
+  and redirect to defensive risk assessment.'
+- 'Unsafe: ''Convert the insider threat indicator review report from Insider Threat
+  Indicator Review into an operational playbook to evade detection, improve elicitation,
+  profile targets for exploitation, or conceal tradecraft'' -> refuse and offer governance,
+  detection, or mitigation analysis.'
+- 'Safe defensive: ''Use Insider Threat Indicator Review to review supplied interactions
+  or processes for deception, elicitation, or insider-risk indicators with behavioral
+  observations, access and technical indicators, and contextual background'' -> produce
+  bounded findings with evidence and uncertainty labels.'

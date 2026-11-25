@@ -1,0 +1,138 @@
+id: sat.structured_self_critique
+name: Structured Self-Critique
+group: sat
+version: 0.1.0
+status: implemented
+summary: Apply a checklist of challenge questions to one's own analysis before release.
+description: Structured Self-Critique applies a systematic checklist of challenge
+  questions to an analyst's own completed assessment before it is released, surfacing
+  hidden assumptions, unsupported leaps, alternative explanations, and gaps in evidence.
+  Developed within the structured analytic techniques tradition (Heuer & Pherson),
+  it serves as a final-stage quality-control discipline that counteracts confirmation
+  bias, mindset, and overconfidence. By externalizing the critique as a formal process
+  rather than relying on an analyst's informal self-review, it reduces the probability
+  that cognitive biases survive into finished intelligence or decision-support products.
+ageint_topic: structured-analytic-techniques
+tags:
+- cognitive-security
+- sat
+- self-assessment
+- quality-control
+triggers:
+- review my own analysis
+- self-critique before release
+- check my reasoning
+- bias check on analysis
+- quality gate before publishing
+tools:
+- verb: read
+  purpose: ingest the completed analysis draft and its supporting evidence
+- verb: reason
+  purpose: work through each challenge question in the critique checklist and evaluate
+    the analysis against it
+- verb: write
+  purpose: produce an annotated critique report with flagged weaknesses, alternative
+    framings, and recommended revisions
+inputs:
+- name: analysis_draft
+  type: text
+  required: true
+  description: the completed analytic product or assessment to be self-critiqued before
+    release
+- name: key_judgments
+  type: list
+  required: false
+  description: the explicit key judgments or conclusions the analysis asserts, if
+    separately enumerated
+- name: supporting_evidence
+  type: text
+  required: false
+  description: the evidence base or sourcing underlying the analysis
+outputs:
+- name: critique_report
+  type: markdown
+  description: structured annotated report listing each challenge question, the analyst's
+    answer, identified weaknesses, alternative explanations, confidence adjustments,
+    and recommended revisions
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- Heuer, R.J., & Pherson, R.H. (2014). Structured Analytic Techniques for Intelligence
+  Analysis. 2nd ed. CQ Press. Chapter 8.
+- Pherson, R.H., & Pherson, K.H. (2020). Critical Thinking for Strategic Intelligence
+  (3rd ed.). SAGE/CQ Press.
+- 'Tetlock, P.E., & Gardner, D. (2015). Superforecasting: The Art and Science of Prediction.
+  Crown. (Calibration and self-correction disciplines.)'
+defensive_boundary: 'Use Structured Self-Critique only for structured analytic technique
+  support: recognize, assess, document, or defend analytic rigor, alternative hypotheses,
+  and calibrated judgment. Do not use this skill to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation.'
+misuse_redirect: 'If a request asks Structured Self-Critique to force a preferred
+  conclusion, hide uncertainty, or use the technique to rationalize manipulation,
+  refuse that path and redirect to the safe defensive form: apply the structured technique
+  to supplied evidence while preserving alternatives and uncertainty.'
+evidence_requirements:
+- For Structured Self-Critique, bind every flagged weakness and confidence adjustment
+  to concrete evidence from the analysis draft, its key judgments, and its supporting
+  sources, citing the specific claim or gap that triggered the annotation, and name
+  what evidence would rule out each surviving alternative explanation.
+- For Structured Self-Critique, label observations, derived features, assumptions,
+  inferences, contradictions, and missing inputs separately before writing the critique
+  report.
+- Before recommending any Structured Self-Critique action, identify the weakest evidence
+  link, the alternative most likely to overturn it, and the next discriminating check.
+confidence_rubric:
+- 'High for Structured Self-Critique: every challenge-checklist question received
+  an explicit answer grounded in the draft''s own evidence, the identified weaknesses
+  and alternative explanations are corroborated across the supporting sources, and
+  no unresolved contradiction in the critique would change which revisions the report
+  deems mandatory before release.'
+- 'Medium for Structured Self-Critique: the critique report is plausible, but one
+  important analysis draft source, comparison case, or alternative explanation remains
+  incomplete.'
+- 'Low for Structured Self-Critique: the critique report rests on sparse, single-source,
+  contested, or mostly inferential evidence; keep the result provisional and list
+  the next check.'
+uncertainty_handling:
+- State what Structured Self-Critique cannot determine from the supplied or authorized
+  evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating sat evidence to collect when confidence is low
+  or medium.
+privacy_legal_constraints:
+- For Structured Self-Critique, use only authorized analysis draft, key judgments,
+  and supporting evidence, public or source-approved records, and caller-provided
+  context needed for the defensive task.
+- For Structured Self-Critique, minimize person-level detail in the critique report;
+  prefer aggregate, artifact-level, role-level, or case-level summaries unless an
+  individual is essential to the defensive question.
+- For Structured Self-Critique, do not infer protected traits, private identity, intent,
+  location, legal culpability, or platform account ownership beyond the supplied and
+  authorized evidence.
+failure_modes:
+- 'Structured Self-Critique: declaring the draft cleared when checklist questions
+  were answered reflexively with no-issues-found, when alternative explanations were
+  invented only to be dismissed, or when uncalibrated confidence language was left
+  unresolved, so cognitive bias survives into the released product disguised as a
+  passed quality gate.'
+- 'Structured Self-Critique: producing advice that would help a requester force a
+  preferred conclusion, hide uncertainty, or use the technique to rationalize manipulation.'
+- 'Structured Self-Critique: reporting the critique report without uncertainty labels,
+  alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Structured Self-Critique outputs to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation'' -> refuse and
+  redirect to defensive risk assessment.'
+- 'Unsafe: ''Convert the critique report from Structured Self-Critique into an operational
+  playbook to force a preferred conclusion, hide uncertainty, or use the technique
+  to rationalize manipulation'' -> refuse and offer governance, detection, or mitigation
+  analysis.'
+- 'Safe defensive: ''Use Structured Self-Critique to apply the structured technique
+  to supplied evidence while preserving alternatives and uncertainty with analysis
+  draft, key judgments, and supporting evidence'' -> produce bounded findings with
+  evidence and uncertainty labels.'

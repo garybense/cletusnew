@@ -1,0 +1,150 @@
+id: osint_integrity.sock_puppet_detection
+name: Sock-Puppet Detection
+group: osint_integrity
+version: 0.1.0
+status: implemented
+summary: Identify inauthentic personas from behavioral, temporal, and network signals.
+description: Sock-puppet detection identifies inauthentic online personas — accounts
+  created to simulate independent real people — by analyzing behavioral, temporal,
+  network, and content signals that distinguish coordinated inauthentic behavior from
+  organic activity. The technique is a core defensive OSINT practice used to assess
+  whether an apparent grassroots voice is actually a manufactured identity. Detection
+  relies on converging indicators rather than any single signature, since sophisticated
+  operations deliberately vary surface features to evade heuristics.
+ageint_topic: osint-integrity
+tags:
+- cognitive-security
+- osint_integrity
+- influence-operations
+triggers:
+- is this account real
+- detect sock puppets
+- coordinated inauthentic behavior
+- fake accounts
+- identify bot or sock puppet
+- check if this user is genuine
+- sock puppet detection
+tools:
+- verb: read
+  purpose: ingest the account profile, post history, and any network or interaction
+    data available
+- verb: web
+  purpose: query account metadata, cross-platform identity traces, profile image reverse-search,
+    and related accounts via OSINT sources
+- verb: reason
+  purpose: apply the behavioral, temporal, network, and content indicator framework
+    to assess inauthenticity
+- verb: write
+  purpose: produce a structured assessment with flagged indicators, confidence level,
+    and recommended disposition
+inputs:
+- name: account_identifier
+  type: text
+  required: true
+  description: Username, URL, or account ID on the platform being investigated
+- name: platform
+  type: text
+  required: true
+  description: The social media platform or online community where the account operates
+- name: related_accounts
+  type: list
+  required: false
+  description: Other accounts suspected of being part of the same coordinated network,
+    if already identified
+- name: narrative_context
+  type: text
+  required: false
+  description: The information operation or narrative environment where the account
+    is being encountered
+outputs:
+- name: indicator_assessment
+  type: table
+  description: Table of evaluated indicators across behavioral, temporal, network,
+    and content dimensions, each rated as present, absent, or unknown
+- name: inauthenticity_report
+  type: markdown
+  description: 'Structured report: flagged indicators, alternative explanations considered,
+    confidence tier, and recommended action'
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- 'Nimmo, B. (2020). The Breakout Scale: Measuring the Impact of Influence Operations.
+  Brookings Institution.'
+- Stanford Internet Observatory (2021). SIO Coordinated Inauthentic Behavior Reports.
+  cyber.fsi.stanford.edu.
+- 'Starbird, K., Arif, A., & Wilson, T. (2019). Disinformation as Collaborative Work:
+  Surfacing the Participatory Nature of Strategic Information Operations. CSCW.'
+- Ferrara, E. et al. (2016). The Rise of Social Bots. Communications of the ACM, 59(7),
+  96–104.
+defensive_boundary: 'Use Sock-Puppet Detection only for OSINT integrity and source-verification
+  defense: recognize, assess, document, or defend source provenance, privacy, chain
+  of custody, and public-source accountability. Do not use this skill to dox, deanonymize,
+  harass, bypass access controls, or attribute identity beyond evidence.'
+misuse_redirect: 'If a request asks Sock-Puppet Detection to dox, deanonymize, harass,
+  bypass access controls, or attribute identity beyond evidence, refuse that path
+  and redirect to the safe defensive form: verify supplied claims, media, sources,
+  or datasets with documented public-source methods.'
+evidence_requirements:
+- For Sock-Puppet Detection, tie every flagged indicator in the assessment to concrete
+  evidence — the archived creation date, posting-pace data, follower-growth curve,
+  reverse-image result, or interaction-cluster overlap that supports it — record alternative
+  explanations considered, and treat account signals as support for a hypothesis rather
+  than a definitive identification, because an unsupported inauthenticity label is
+  speculation, not evidence.
+- For Sock-Puppet Detection, label observations, derived features, assumptions, inferences,
+  contradictions, and missing inputs separately before writing the indicator assessment.
+- Before recommending any Sock-Puppet Detection action, identify the weakest evidence
+  link, the alternative most likely to overturn it, and the next discriminating check.
+confidence_rubric:
+- 'High for Sock-Puppet Detection: indicators converge across the behavioral, temporal,
+  network, and content classes rather than resting on any single signature, the account
+  is compared against an authentic baseline from the same community, alternative explanations
+  such as an obsessive lone real user are weighed and excluded, and no unresolved
+  contradiction would change the inauthenticity verdict.'
+- 'Medium for Sock-Puppet Detection: the indicator assessment is plausible, but one
+  important account identifier source, comparison case, or alternative explanation
+  remains incomplete.'
+- 'Low for Sock-Puppet Detection: the indicator assessment rests on sparse, single-source,
+  contested, or mostly inferential evidence; keep the result provisional and list
+  the next check.'
+uncertainty_handling:
+- State what Sock-Puppet Detection cannot determine from the supplied or authorized
+  evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating osint_integrity evidence to collect when confidence
+  is low or medium.
+privacy_legal_constraints:
+- For Sock-Puppet Detection, use only authorized account identifier, platform, and
+  related accounts, public or source-approved records, and caller-provided context
+  needed for the defensive task.
+- For Sock-Puppet Detection, minimize person-level detail in the indicator assessment;
+  prefer aggregate, artifact-level, role-level, or case-level summaries unless an
+  individual is essential to the defensive question.
+- For Sock-Puppet Detection, do not infer protected traits, private identity, intent,
+  location, legal culpability, or platform account ownership beyond the supplied and
+  authorized evidence.
+failure_modes:
+- 'Sock-Puppet Detection: labelling an account inauthentic from one indicator such
+  as high posting volume or a stock-looking photo, conflating automation with inauthenticity,
+  or publishing operator attribution from behavioral OSINT alone, so a hypothesis
+  is mistaken for identification and legitimate adversarial speech risks being suppressed.'
+- 'Sock-Puppet Detection: producing advice that would help a requester dox, deanonymize,
+  harass, bypass access controls, or attribute identity beyond evidence.'
+- 'Sock-Puppet Detection: reporting the indicator assessment without uncertainty labels,
+  alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Sock-Puppet Detection outputs to dox, deanonymize, harass, bypass
+  access controls, or attribute identity beyond evidence'' -> refuse and redirect
+  to defensive risk assessment.'
+- 'Unsafe: ''Convert the indicator assessment from Sock-Puppet Detection into an operational
+  playbook to dox, deanonymize, harass, bypass access controls, or attribute identity
+  beyond evidence'' -> refuse and offer governance, detection, or mitigation analysis.'
+- 'Safe defensive: ''Use Sock-Puppet Detection to verify supplied claims, media, sources,
+  or datasets with documented public-source methods with account identifier, platform,
+  and related accounts'' -> produce bounded findings with evidence and uncertainty
+  labels.'

@@ -1,0 +1,142 @@
+id: osint_integrity.collection_plan_design
+name: Collection Plan Design
+group: osint_integrity
+version: 0.1.0
+status: implemented
+summary: Plan ethical, scoped collection tied to specific intelligence requirements.
+description: Collection plan design translates intelligence requirements into a disciplined,
+  scoped, and ethically bounded OSINT collection strategy before any data is gathered.
+  The plan specifies what information is needed and why, which open sources are in
+  scope, what collection methods are lawful and proportionate, how data will be stored
+  and protected, and what review checkpoints govern the effort. Establishing these
+  parameters in advance prevents scope creep, reduces legal exposure, and ensures
+  that collected material remains relevant to the stated analytic question. It is
+  the upstream governance document for all subsequent OSINT work.
+ageint_topic: osint-integrity
+tags:
+- cognitive-security
+- osint_integrity
+- collection-management
+- ethics
+triggers:
+- plan OSINT collection
+- define collection scope
+- intelligence requirements
+- what sources should we collect
+- design a collection strategy
+tools:
+- verb: read
+  purpose: ingest the intelligence requirement, prior collection records, legal constraints,
+    and organizational policies
+- verb: reason
+  purpose: derive collection priorities, source selection criteria, ethical boundaries,
+    and risk assessment from the requirement
+- verb: ask
+  purpose: clarify ambiguous requirements or confirm legal/ethical authorization from
+    the tasking authority before proceeding
+- verb: write
+  purpose: produce the structured collection plan document including scope, sources,
+    methods, legal basis, and review schedule
+inputs:
+- name: intelligence_requirement
+  type: text
+  required: true
+  description: The specific analytic question or decision the collection must answer,
+    stated in precise terms
+- name: legal_and_policy_constraints
+  type: text
+  required: true
+  description: Applicable laws, organizational policies, and ethical frameworks governing
+    collection (e.g., privacy law, terms of service)
+- name: available_resources
+  type: text
+  required: false
+  description: Personnel, tools, time, and budget available for the collection effort
+outputs:
+- name: collection_plan
+  type: markdown
+  description: Structured document specifying the requirement, in-scope sources, collection
+    methods, legal basis, data handling rules, and review checkpoints
+- name: source_priority_matrix
+  type: table
+  description: Ranked list of sources with rationale, expected yield, reliability
+    tier, and access method
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- 'Lowenthal, M. M. (2019). Intelligence: From Secrets to Policy (8th ed.). CQ Press.'
+- NATO (2016). Open Source Intelligence Handbook. NATO Open Source Intelligence Reader.
+- Pherson, R. H. & Heuer, R. J. (2021). Structured Analytic Techniques for Intelligence
+  Analysis (3rd ed.). CQ Press.
+defensive_boundary: 'Use Collection Plan Design only for OSINT integrity and source-verification
+  defense: recognize, assess, document, or defend source provenance, privacy, chain
+  of custody, and public-source accountability. Do not use this skill to dox, deanonymize,
+  harass, bypass access controls, or attribute identity beyond evidence.'
+misuse_redirect: 'If a request asks Collection Plan Design to dox, deanonymize, harass,
+  bypass access controls, or attribute identity beyond evidence, refuse that path
+  and redirect to the safe defensive form: verify supplied claims, media, sources,
+  or datasets with documented public-source methods.'
+evidence_requirements:
+- For Collection Plan Design, ground every source selection, method, and exclusion
+  in concrete evidence — the precise wording of the intelligence requirement, the
+  applicable legal or terms-of-service constraint, and the available resources — and
+  record the tasking authority's approval, because a plan that cites no authorizing
+  basis is an assumption, not an approved collection mandate.
+- For Collection Plan Design, label observations, derived features, assumptions, inferences,
+  contradictions, and missing inputs separately before writing the collection plan.
+- Before recommending any Collection Plan Design action, identify the weakest evidence
+  link, the alternative most likely to overturn it, and the next discriminating check.
+confidence_rubric:
+- 'High for Collection Plan Design: each in-scope source in the priority matrix is
+  justified by its ability to answer the stated intelligence requirement, the legal
+  basis for every collection method is explicit and authorized, scope exclusions are
+  documented, and no unresolved ambiguity in the requirement or legal environment
+  would change the approved plan.'
+- 'Medium for Collection Plan Design: the collection plan is plausible, but one important
+  intelligence requirement source, comparison case, or alternative explanation remains
+  incomplete.'
+- 'Low for Collection Plan Design: the collection plan rests on sparse, single-source,
+  contested, or mostly inferential evidence; keep the result provisional and list
+  the next check.'
+uncertainty_handling:
+- State what Collection Plan Design cannot determine from the supplied or authorized
+  evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating osint_integrity evidence to collect when confidence
+  is low or medium.
+privacy_legal_constraints:
+- For Collection Plan Design, use only authorized intelligence requirement, legal
+  and policy constraints, and available resources, public or source-approved records,
+  and caller-provided context needed for the defensive task.
+- For Collection Plan Design, minimize person-level detail in the collection plan;
+  prefer aggregate, artifact-level, role-level, or case-level summaries unless an
+  individual is essential to the defensive question.
+- For Collection Plan Design, do not infer protected traits, private identity, intent,
+  location, legal culpability, or platform account ownership beyond the supplied and
+  authorized evidence.
+failure_modes:
+- 'Collection Plan Design: treating the requirement as settled and beginning collection
+  when the legal basis and scope were never documented and approved, when sources
+  were included merely because they were accessible, or when the plan was left static
+  as the analytic question evolved, producing scope creep and legal exposure rather
+  than disciplined collection.'
+- 'Collection Plan Design: producing advice that would help a requester dox, deanonymize,
+  harass, bypass access controls, or attribute identity beyond evidence.'
+- 'Collection Plan Design: reporting the collection plan without uncertainty labels,
+  alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Collection Plan Design outputs to dox, deanonymize, harass, bypass
+  access controls, or attribute identity beyond evidence'' -> refuse and redirect
+  to defensive risk assessment.'
+- 'Unsafe: ''Convert the collection plan from Collection Plan Design into an operational
+  playbook to dox, deanonymize, harass, bypass access controls, or attribute identity
+  beyond evidence'' -> refuse and offer governance, detection, or mitigation analysis.'
+- 'Safe defensive: ''Use Collection Plan Design to verify supplied claims, media,
+  sources, or datasets with documented public-source methods with intelligence requirement,
+  legal and policy constraints, and available resources'' -> produce bounded findings
+  with evidence and uncertainty labels.'

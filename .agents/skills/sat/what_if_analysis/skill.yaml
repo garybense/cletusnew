@@ -1,0 +1,141 @@
+id: sat.what_if_analysis
+name: What-If Analysis
+group: sat
+version: 0.1.0
+status: implemented
+summary: Posit a surprising event as already true and reason out its precursors and
+  implications.
+description: What-If Analysis (also called 'What If?' Analysis) posits a surprising,
+  low-probability, or currently-dismissed event as if it has already occurred, then
+  reasons backward to identify the preconditions and causal pathways that could have
+  produced it and forward to map its implications. Developed as a structured analytic
+  technique by Heuer and Pherson, it is designed to combat mindset rigidity and the
+  tendency to discount scenarios that contradict prevailing assumptions — particularly
+  warning failures where analysts dismissed unlikely-but-consequential events. By
+  forcing analysts to treat the scenario as fact rather than possibility, it unlocks
+  creative causal reasoning that prospective risk assessment often suppresses.
+ageint_topic: structured-analytic-techniques
+tags:
+- cognitive-security
+- sat
+- scenario-analysis
+- warning-analysis
+triggers:
+- what if this happened
+- assume this is already true
+- low probability high impact scenario
+- surprise scenario analysis
+- what would have to be true for this
+tools:
+- verb: read
+  purpose: ingest the scenario posit, current intelligence or context, and any relevant
+    baseline assumptions
+- verb: reason
+  purpose: generate preconditions, causal pathways, and implications from the assumed-true
+    scenario frame
+- verb: write
+  purpose: produce the what-if report with preconditions, pathways, implications,
+    indicators, and revised probability assessment
+inputs:
+- name: scenario_posit
+  type: text
+  required: true
+  description: the specific surprising or low-probability event stated as an accomplished
+    fact (e.g., 'Country X has already conducted a cyberattack on the power grid')
+- name: current_context
+  type: text
+  required: false
+  description: the prevailing analytic picture or baseline assessment that the what-if
+    scenario challenges
+- name: time_horizon
+  type: text
+  required: false
+  description: the timeframe within which the posited event is assumed to have occurred
+    or to occur
+outputs:
+- name: what_if_report
+  type: markdown
+  description: 'structured report covering: (1) the scenario posit stated as fact,
+    (2) preconditions that would have had to be true, (3) plausible causal pathways
+    leading to the event, (4) implications and second-order effects, (5) observable
+    indicators that the scenario is developing, (6) revised probability assessment,
+    and (7) implications for current collection or action'
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- Heuer, R.J., & Pherson, R.H. (2014). Structured Analytic Techniques for Intelligence
+  Analysis. 2nd ed. CQ Press. Chapter 8 (What If? Analysis).
+- Pherson, R.H., & Pherson, K.H. (2020). Critical Thinking for Strategic Intelligence
+  (3rd ed.). SAGE/CQ Press.
+- 'Betts, R.K. (1978). Analysis, War, and Decision: Why Intelligence Failures Are
+  Inevitable. World Politics, 31(1), 61-89. (The warning-failure problem that What-If
+  addresses.)'
+defensive_boundary: 'Use What-If Analysis only for structured analytic technique support:
+  recognize, assess, document, or defend analytic rigor, alternative hypotheses, and
+  calibrated judgment. Do not use this skill to force a preferred conclusion, hide
+  uncertainty, or use the technique to rationalize manipulation.'
+misuse_redirect: 'If a request asks What-If Analysis to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation, refuse that
+  path and redirect to the safe defensive form: apply the structured technique to
+  supplied evidence while preserving alternatives and uncertainty.'
+evidence_requirements:
+- For What-If Analysis, bind every precondition, causal pathway, and indicator to
+  concrete evidence from the scenario posit, current context, and time horizon, citing
+  which existing evidence is consistent with each pathway, and justify the revised
+  probability with the evidence the backward-reasoning surfaced rather than prevailing
+  mindset.
+- For What-If Analysis, label observations, derived features, assumptions, inferences,
+  contradictions, and missing inputs separately before writing the what if report.
+- Before recommending any What-If Analysis action, identify the weakest evidence link,
+  the alternative most likely to overturn it, and the next discriminating check.
+confidence_rubric:
+- 'High for What-If Analysis: the enumerated preconditions and causal pathways are
+  each consistent with current evidence, the observable indicators derived from them
+  are independently checkable, and the revised probability estimate rests on reasoning
+  robust enough that no unresolved contradiction in the baseline would change whether
+  the posited scenario deserves more weight.'
+- 'Medium for What-If Analysis: the what if report is plausible, but one important
+  scenario posit source, comparison case, or alternative explanation remains incomplete.'
+- 'Low for What-If Analysis: the what if report rests on sparse, single-source, contested,
+  or mostly inferential evidence; keep the result provisional and list the next check.'
+uncertainty_handling:
+- State what What-If Analysis cannot determine from the supplied or authorized evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating sat evidence to collect when confidence is low
+  or medium.
+privacy_legal_constraints:
+- For What-If Analysis, use only authorized scenario posit, current context, and time
+  horizon, public or source-approved records, and caller-provided context needed for
+  the defensive task.
+- For What-If Analysis, minimize person-level detail in the what if report; prefer
+  aggregate, artifact-level, role-level, or case-level summaries unless an individual
+  is essential to the defensive question.
+- For What-If Analysis, do not infer protected traits, private identity, intent, location,
+  legal culpability, or platform account ownership beyond the supplied and authorized
+  evidence.
+failure_modes:
+- 'What-If Analysis: declaring the report complete when the posit was softened to
+  a mere possibility instead of stated as fact, when the precondition step was skipped
+  to jump straight to implications, or when no observable indicators were produced,
+  so the exercise yields no actionable warning guidance for collection or monitoring.'
+- 'What-If Analysis: producing advice that would help a requester force a preferred
+  conclusion, hide uncertainty, or use the technique to rationalize manipulation.'
+- 'What-If Analysis: reporting the what if report without uncertainty labels, alternative
+  explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use What-If Analysis outputs to force a preferred conclusion, hide uncertainty,
+  or use the technique to rationalize manipulation'' -> refuse and redirect to defensive
+  risk assessment.'
+- 'Unsafe: ''Convert the what if report from What-If Analysis into an operational
+  playbook to force a preferred conclusion, hide uncertainty, or use the technique
+  to rationalize manipulation'' -> refuse and offer governance, detection, or mitigation
+  analysis.'
+- 'Safe defensive: ''Use What-If Analysis to apply the structured technique to supplied
+  evidence while preserving alternatives and uncertainty with scenario posit, current
+  context, and time horizon'' -> produce bounded findings with evidence and uncertainty
+  labels.'

@@ -1,0 +1,147 @@
+id: sat.cross_impact_matrix
+name: Cross-Impact Matrix
+group: sat
+version: 0.1.0
+status: implemented
+summary: Assess how each driver influences every other to find leverage and feedback.
+description: The Cross-Impact Matrix is a structured technique for mapping how each
+  driver, trend, or variable in a system affects every other one, enabling analysts
+  to identify reinforcing feedback loops, inhibitory relationships, and high-leverage
+  nodes whose change cascades through the system. Cells in the matrix record the direction
+  and magnitude of influence (positive, negative, neutral, conditional) rather than
+  independent assessments of each factor. The technique is widely used in scenario
+  planning, strategic foresight, and systemic-threat analysis to surface non-obvious
+  interdependencies that single-variable analysis misses.
+ageint_topic: structured-analytic-techniques
+tags:
+- cognitive-security
+- sat
+- systems-analysis
+triggers:
+- how do these factors interact
+- cross-impact matrix
+- which variables drive the others
+- find feedback loops
+- map the interdependencies
+tools:
+- verb: read
+  purpose: ingest the list of key drivers, trends, or variables and any existing analysis
+    of each
+- verb: reason
+  purpose: assess pairwise influence relationships, identify feedback loops, and rank
+    leverage points
+- verb: write
+  purpose: produce the filled matrix, loop inventory, leverage ranking, and analytic
+    narrative
+inputs:
+- name: driver_list
+  type: list
+  required: true
+  description: A set of 4–12 named drivers, trends, variables, or actors to be cross-analyzed
+    (e.g., from a prior brainstorm or key-drivers step)
+- name: influence_scale
+  type: text
+  required: false
+  description: 'Optional scoring convention: e.g., +2 (strong positive), +1 (weak
+    positive), 0 (negligible), -1 (weak negative), -2 (strong negative), C (conditional)'
+- name: focal_question
+  type: text
+  required: true
+  description: The analytic question or planning scenario for which interdependencies
+    matter
+outputs:
+- name: cross_impact_matrix
+  type: table
+  description: N×N matrix where cell (i,j) records the influence of driver i on driver
+    j, scored and briefly annotated
+- name: loop_inventory
+  type: markdown
+  description: Identified reinforcing and balancing feedback loops, with the chain
+    of drivers forming each loop
+- name: leverage_ranking
+  type: table
+  description: Drivers ranked by aggregate outgoing influence score (active) and incoming
+    influence score (passive), identifying high-leverage and highly-sensitive variables
+- name: analytic_narrative
+  type: markdown
+  description: Interpretation of the most significant loops and leverage points relative
+    to the focal question
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- Gordon, T. J., & Hayward, H. (1968). Initial experiments with the cross impact matrix
+  method of forecasting. Futures, 1(2), 100–116.
+- Heuer, R. J., & Pherson, R. H. (2015). Structured Analytic Techniques for Intelligence
+  Analysis, 3rd ed. CQ Press.
+- 'Bishop, P., Hines, A., & Collins, T. (2007). The current state of scenario development:
+  An overview of techniques. Foresight, 9(1), 5–25.'
+defensive_boundary: 'Use Cross-Impact Matrix only for structured analytic technique
+  support: recognize, assess, document, or defend analytic rigor, alternative hypotheses,
+  and calibrated judgment. Do not use this skill to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation.'
+misuse_redirect: 'If a request asks Cross-Impact Matrix to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation, refuse that
+  path and redirect to the safe defensive form: apply the structured technique to
+  supplied evidence while preserving alternatives and uncertainty.'
+evidence_requirements:
+- For Cross-Impact Matrix, justify each cell's direction and magnitude with specific
+  evidence about that pairwise relationship, record a deliberate zero as an assessed
+  finding rather than an unexamined default, and tie the loop inventory and leverage
+  ranking to the scored cells that produced them.
+- For Cross-Impact Matrix, label observations, derived features, assumptions, inferences,
+  contradictions, and missing inputs separately before writing the cross impact matrix.
+- Before recommending any Cross-Impact Matrix action, identify the weakest evidence
+  link, the alternative most likely to overturn it, and the next discriminating check.
+confidence_rubric:
+- 'High for Cross-Impact Matrix: each directional cell was assessed independently
+  before any holistic reading, the identified loops and active-versus-passive leverage
+  rankings follow from the row and column sums, the influence judgments are corroborated
+  by multiple sources, and no unresolved contradiction would change the high-leverage
+  drivers.'
+- 'Medium for Cross-Impact Matrix: the cross impact matrix is plausible, but one important
+  driver list source, comparison case, or alternative explanation remains incomplete.'
+- 'Low for Cross-Impact Matrix: the cross impact matrix rests on sparse, single-source,
+  contested, or mostly inferential evidence; keep the result provisional and list
+  the next check.'
+uncertainty_handling:
+- State what Cross-Impact Matrix cannot determine from the supplied or authorized
+  evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating sat evidence to collect when confidence is low
+  or medium.
+privacy_legal_constraints:
+- For Cross-Impact Matrix, use only authorized driver list, influence scale, and focal
+  question, public or source-approved records, and caller-provided context needed
+  for the defensive task.
+- For Cross-Impact Matrix, minimize person-level detail in the cross impact matrix;
+  prefer aggregate, artifact-level, role-level, or case-level summaries unless an
+  individual is essential to the defensive question.
+- For Cross-Impact Matrix, do not infer protected traits, private identity, intent,
+  location, legal culpability, or platform account ownership beyond the supplied and
+  authorized evidence.
+failure_modes:
+- 'Cross-Impact Matrix: assuming a relationship is negligible and skipping cells,
+  treating the influence of driver i on j as symmetric with j on i, or reading the
+  matrix as a forecast of trajectories rather than a map of structure, so unassessed
+  or conflated cells distort the leverage ranking.'
+- 'Cross-Impact Matrix: producing advice that would help a requester force a preferred
+  conclusion, hide uncertainty, or use the technique to rationalize manipulation.'
+- 'Cross-Impact Matrix: reporting the cross impact matrix without uncertainty labels,
+  alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Cross-Impact Matrix outputs to force a preferred conclusion, hide
+  uncertainty, or use the technique to rationalize manipulation'' -> refuse and redirect
+  to defensive risk assessment.'
+- 'Unsafe: ''Convert the cross impact matrix from Cross-Impact Matrix into an operational
+  playbook to force a preferred conclusion, hide uncertainty, or use the technique
+  to rationalize manipulation'' -> refuse and offer governance, detection, or mitigation
+  analysis.'
+- 'Safe defensive: ''Use Cross-Impact Matrix to apply the structured technique to
+  supplied evidence while preserving alternatives and uncertainty with driver list,
+  influence scale, and focal question'' -> produce bounded findings with evidence
+  and uncertainty labels.'

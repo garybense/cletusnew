@@ -1,0 +1,151 @@
+id: sat.signposts_of_change
+name: Signposts of Change
+group: sat
+version: 0.1.0
+status: implemented
+summary: Track leading indicators over time to detect trajectory shifts early.
+description: Signposts of Change (Heuer & Pherson) is a prospective monitoring technique
+  that derives observable leading indicators from a set of alternative scenarios or
+  hypotheses, then tracks those indicators over time to detect which trajectory is
+  unfolding before it becomes undeniable. Unlike static indicators lists, the technique
+  pairs each signpost explicitly with the scenario it confirms or rules out, allowing
+  analysts to update scenario probabilities continuously as new evidence arrives.
+  In cognitive-security contexts it also serves as an early-warning system for narrative
+  shifts, influence campaign pivots, and disinformation trajectory changes.
+ageint_topic: structured-analytic-techniques
+tags:
+- cognitive-security
+- sat
+- warning-analysis
+triggers:
+- signposts of change
+- leading indicators
+- track trajectory shifts
+- early warning indicators
+- monitor for change
+- watch for signs
+tools:
+- verb: read
+  purpose: ingest the alternative scenarios or hypotheses whose divergence the signposts
+    will track, and any existing indicators or monitoring frameworks
+- verb: reason
+  purpose: derive observable leading indicators for each scenario that are mutually
+    discriminating — each signpost should confirm one scenario and constrain others
+- verb: write
+  purpose: emit the signpost matrix with per-scenario indicator assignments, collection
+    guidance, and the update protocol for revising scenario probabilities
+- verb: search
+  purpose: query available open-source information to check current signpost status
+    when the skill is used for active monitoring rather than indicator design
+inputs:
+- name: scenarios_or_hypotheses
+  type: list
+  required: true
+  description: the alternative trajectories or hypotheses among which the signposts
+    must discriminate; at minimum two, typically three to five
+- name: current_assessment
+  type: text
+  required: false
+  description: the current dominant analytic judgment, including its assumed trajectory,
+    to establish the baseline from which change would be detected
+- name: collection_resources
+  type: list
+  required: false
+  description: available monitoring sources (data streams, reporting channels, open-source
+    feeds) that constrain which signposts are observable in practice
+outputs:
+- name: signpost_matrix
+  type: table
+  description: rows are signposts; columns are scenarios; cells indicate whether the
+    signpost confirms (C), is neutral (N), or disconfirms (D) each scenario; includes
+    observability rating and collection source for each signpost
+- name: collection_guidance
+  type: markdown
+  description: 'for each signpost: what to look for, where to look, how often, and
+    what threshold constitutes a confirmed observation'
+- name: update_protocol
+  type: markdown
+  description: rules for revising scenario probabilities when signposts fire or remain
+    absent; includes absence-of-evidence handling and re-evaluation triggers
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- Pherson, R. H. & Heuer, R. J. (2020). Structured Analytic Techniques for Intelligence
+  Analysis (3rd ed.). SAGE/CQ Press. Chapter on Signposts of Change.
+- Heuer, R. J. & Pherson, R. H. (2014). Structured Analytic Techniques for Intelligence
+  Analysis (2nd ed.). CQ Press.
+- 'Grabo, C. M. (2004). Anticipating Surprise: Analysis for Strategic Warning. Joint
+  Military Intelligence College. (classical warning indicators framework)'
+defensive_boundary: 'Use Signposts of Change only for structured analytic technique
+  support: recognize, assess, document, or defend analytic rigor, alternative hypotheses,
+  and calibrated judgment. Do not use this skill to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation.'
+misuse_redirect: 'If a request asks Signposts of Change to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation, refuse that
+  path and redirect to the safe defensive form: apply the structured technique to
+  supplied evidence while preserving alternatives and uncertainty.'
+evidence_requirements:
+- For Signposts of Change, tie each signpost, its confirm-neutral-disconfirm assignment,
+  and its observation threshold to concrete evidence about the scenarios it discriminates
+  and the collection source that makes it observable, and require the update protocol
+  to act on the documented presence or evidenced absence of each indicator rather
+  than on the analyst's prior expectation.
+- For Signposts of Change, label observations, derived features, assumptions, inferences,
+  contradictions, and missing inputs separately before writing the signpost matrix.
+- Before recommending any Signposts of Change action, identify the weakest evidence
+  link, the alternative most likely to overturn it, and the next discriminating check.
+confidence_rubric:
+- 'High for Signposts of Change: each signpost in the matrix is demonstrably discriminating
+  and observable from an identified collection source, observation thresholds were
+  set before collection began, the update protocol treats the absence of an expected
+  signpost as a probabilistic signal, and no unresolved contradiction would change
+  which scenario the current evidence favors.'
+- 'Medium for Signposts of Change: the signpost matrix is plausible, but one important
+  scenarios or hypotheses source, comparison case, or alternative explanation remains
+  incomplete.'
+- 'Low for Signposts of Change: the signpost matrix rests on sparse, single-source,
+  contested, or mostly inferential evidence; keep the result provisional and list
+  the next check.'
+uncertainty_handling:
+- State what Signposts of Change cannot determine from the supplied or authorized
+  evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating sat evidence to collect when confidence is low
+  or medium.
+privacy_legal_constraints:
+- For Signposts of Change, use only authorized scenarios or hypotheses, current assessment,
+  and collection resources, public or source-approved records, and caller-provided
+  context needed for the defensive task.
+- For Signposts of Change, minimize person-level detail in the signpost matrix; prefer
+  aggregate, artifact-level, role-level, or case-level summaries unless an individual
+  is essential to the defensive question.
+- For Signposts of Change, do not infer protected traits, private identity, intent,
+  location, legal culpability, or platform account ownership beyond the supplied and
+  authorized evidence.
+failure_modes:
+- 'Signposts of Change: declaring the watch-list valid while including signposts consistent
+  with every scenario, adjusting observation thresholds after results are known to
+  protect the preferred trajectory, or treating a missing expected signpost as uninformative,
+  so the monitoring system loses diagnostic value and fails to warn of the trajectory
+  shift it was built to catch.'
+- 'Signposts of Change: producing advice that would help a requester force a preferred
+  conclusion, hide uncertainty, or use the technique to rationalize manipulation.'
+- 'Signposts of Change: reporting the signpost matrix without uncertainty labels,
+  alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Signposts of Change outputs to force a preferred conclusion, hide
+  uncertainty, or use the technique to rationalize manipulation'' -> refuse and redirect
+  to defensive risk assessment.'
+- 'Unsafe: ''Convert the signpost matrix from Signposts of Change into an operational
+  playbook to force a preferred conclusion, hide uncertainty, or use the technique
+  to rationalize manipulation'' -> refuse and offer governance, detection, or mitigation
+  analysis.'
+- 'Safe defensive: ''Use Signposts of Change to apply the structured technique to
+  supplied evidence while preserving alternatives and uncertainty with scenarios or
+  hypotheses, current assessment, and collection resources'' -> produce bounded findings
+  with evidence and uncertainty labels.'

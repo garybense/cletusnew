@@ -1,0 +1,150 @@
+id: counterintelligence.adversary_tradecraft_profiling
+name: Adversary Tradecraft Profiling
+group: counterintelligence
+version: 0.1.0
+status: implemented
+summary: Profile an adversary's methods, patterns, and signatures to anticipate their
+  moves.
+description: Adversary tradecraft profiling systematically characterizes the methods,
+  patterns, tools, and operational signatures an adversary habitually employs across
+  known operations. Drawn from counterintelligence practice, it converts scattered
+  incident data into a durable behavioral model that enables anticipation of future
+  moves, attribution of ambiguous incidents, and identification of gaps the adversary
+  exploits. The technique applies structured elicitation across the TTPS (Tactics,
+  Techniques, and Procedures, extended with observable signatures) framework to distinguish
+  stable behavioral fingerprints from adaptive camouflage.
+ageint_topic: counterintelligence
+tags:
+- cognitive-security
+- counterintelligence
+- attribution
+- behavioral-analysis
+triggers:
+- profile this adversary
+- what is their playbook
+- characterize their methods
+- what TTPs does this actor use
+- how do they typically operate
+- adversary signature analysis
+tools:
+- verb: read
+  purpose: ingest known incident reports, case histories, and prior analytic products
+    on the adversary
+- verb: reason
+  purpose: extract stable behavioral patterns, rank by consistency, and distinguish
+    TTPs from one-off adaptations
+- verb: write
+  purpose: 'emit a structured tradecraft profile: TTPS table, confidence assessments,
+    anticipatory indicators, and collection gaps'
+inputs:
+- name: incident_corpus
+  type: list
+  required: true
+  description: Known or attributed operations, incidents, or cases involving the adversary
+    — sourced from case files, open reporting, or prior analytic products
+- name: adversary_identifier
+  type: text
+  required: true
+  description: Name, alias, or cluster label for the adversary being profiled
+- name: collection_gaps
+  type: text
+  required: false
+  description: Known blind spots or missing reporting that may skew the profile
+outputs:
+- name: tradecraft_profile
+  type: table
+  description: 'TTPS table: each tactic with associated techniques, observed procedures,
+    confidence level, and frequency across known cases'
+- name: anticipatory_indicators
+  type: markdown
+  description: Behavioral signatures to watch for in future operations, keyed to the
+    stable patterns identified
+- name: profile_caveats
+  type: markdown
+  description: Confidence-bounded caveats noting collection gaps, potential for adversary
+    adaptation, and risks of mirror-imaging
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- Heuer, R.J. & Pherson, R.H. (2015). Structured Analytic Techniques for Intelligence
+  Analysis, 2nd ed. CQ Press. (Chapter on Indicators).
+- 'Byman, D. & Pollack, K. (2001). ''Let Us Now Praise Great Men: Bringing the Statesman
+  Back In.'' International Security 25(4).'
+- MITRE ATT&CK Framework (2023). Adversary Tactics, Techniques, and Common Knowledge.
+  MITRE Corporation. https://attack.mitre.org/
+- 'Grabo, C.M. (2004). Anticipating Surprise: Analysis for Strategic Warning. University
+  Press of America.'
+defensive_boundary: 'Use Adversary Tradecraft Profiling only for counterintelligence
+  and analytic-process defense: recognize, assess, document, or defend analytic teams,
+  collection processes, and institutional trust boundaries. Do not use this skill
+  to evade detection, improve elicitation, profile targets for exploitation, or conceal
+  tradecraft.'
+misuse_redirect: 'If a request asks Adversary Tradecraft Profiling to evade detection,
+  improve elicitation, profile targets for exploitation, or conceal tradecraft, refuse
+  that path and redirect to the safe defensive form: review supplied interactions
+  or processes for deception, elicitation, or insider-risk indicators.'
+evidence_requirements:
+- For Adversary Tradecraft Profiling, bind every tactic, technique, signature, and
+  anticipatory indicator to concrete evidence from a specific attributed incident
+  in the corpus, naming the case, source, and attribution confidence, and flag any
+  pattern resting on a single operation as provisional rather than probative evidence.
+- For Adversary Tradecraft Profiling, label observations, derived features, assumptions,
+  inferences, contradictions, and missing inputs separately before writing the tradecraft
+  profile.
+- Before recommending any Adversary Tradecraft Profiling action, identify the weakest
+  evidence link, the alternative most likely to overturn it, and the next discriminating
+  check.
+confidence_rubric:
+- 'High for Adversary Tradecraft Profiling: each stable TTP in the tradecraft profile
+  is corroborated across two or more independently attributed incidents, the consistency-and-confidence
+  scoring holds when any single case is removed, the anticipatory indicators follow
+  logically from those patterns, and no unresolved contradiction would change the
+  assessment.'
+- 'Medium for Adversary Tradecraft Profiling: the tradecraft profile is plausible,
+  but one important incident corpus source, comparison case, or alternative explanation
+  remains incomplete.'
+- 'Low for Adversary Tradecraft Profiling: the tradecraft profile rests on sparse,
+  single-source, contested, or mostly inferential evidence; keep the result provisional
+  and list the next check.'
+uncertainty_handling:
+- State what Adversary Tradecraft Profiling cannot determine from the supplied or
+  authorized evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating counterintelligence evidence to collect when confidence
+  is low or medium.
+privacy_legal_constraints:
+- For Adversary Tradecraft Profiling, use only authorized incident corpus, adversary
+  identifier, and collection gaps, public or source-approved records, and caller-provided
+  context needed for the defensive task.
+- For Adversary Tradecraft Profiling, minimize person-level detail in the tradecraft
+  profile; prefer aggregate, artifact-level, role-level, or case-level summaries unless
+  an individual is essential to the defensive question.
+- For Adversary Tradecraft Profiling, do not infer protected traits, private identity,
+  intent, location, legal culpability, or platform account ownership beyond the supplied
+  and authorized evidence.
+failure_modes:
+- 'Adversary Tradecraft Profiling: declaring the profile durable when the clustering
+  step never separated stable signatures from one-off adaptive camouflage, or when
+  known collection gaps were left unstated, so apparent patterns reflect biased visibility
+  rather than genuine adversary habits.'
+- 'Adversary Tradecraft Profiling: producing advice that would help a requester evade
+  detection, improve elicitation, profile targets for exploitation, or conceal tradecraft.'
+- 'Adversary Tradecraft Profiling: reporting the tradecraft profile without uncertainty
+  labels, alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Adversary Tradecraft Profiling outputs to evade detection, improve
+  elicitation, profile targets for exploitation, or conceal tradecraft'' -> refuse
+  and redirect to defensive risk assessment.'
+- 'Unsafe: ''Convert the tradecraft profile from Adversary Tradecraft Profiling into
+  an operational playbook to evade detection, improve elicitation, profile targets
+  for exploitation, or conceal tradecraft'' -> refuse and offer governance, detection,
+  or mitigation analysis.'
+- 'Safe defensive: ''Use Adversary Tradecraft Profiling to review supplied interactions
+  or processes for deception, elicitation, or insider-risk indicators with incident
+  corpus, adversary identifier, and collection gaps'' -> produce bounded findings
+  with evidence and uncertainty labels.'

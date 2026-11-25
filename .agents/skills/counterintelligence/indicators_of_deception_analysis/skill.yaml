@@ -1,0 +1,144 @@
+id: counterintelligence.indicators_of_deception_analysis
+name: Indicators of Deception Analysis
+group: counterintelligence
+version: 0.1.0
+status: implemented
+summary: Apply the MOM/POP/MOSES/EVE deception-detection checklists to a body of evidence.
+description: Indicators of Deception Analysis applies the structured MOM/POP/MOSES/EVE
+  analytical framework to a body of evidence to assess whether an adversary may be
+  conducting an active denial-and-deception (D&D) operation. MOM evaluates Motive,
+  Opportunity, and Means; POP checks the opponent's Past Opposition Practices (their
+  historical track record of deception against this type of target); MOSES assesses
+  the Manipulability of Sources feeding the analysis; and EVE applies an overall Evaluation
+  of Evidence given the deception risk surfaced by the prior components. The combined
+  framework converts an otherwise intuitive 'something seems off' judgment into a
+  structured, documentable deception-hypothesis test.
+ageint_topic: counterintelligence
+tags:
+- cognitive-security
+- counterintelligence
+- deception-detection
+triggers:
+- indicators of deception
+- MOM POP MOSES EVE
+- something seems off about this intelligence
+- deception analysis
+- is this information planted
+- denial and deception check
+- anomaly in the evidence
+tools:
+- verb: read
+  purpose: ingest the body of evidence, intelligence reporting, or communication under
+    analysis
+- verb: reason
+  purpose: apply each checklist component (MOM, POP, MOSES, EVE) systematically and
+    synthesize findings
+- verb: write
+  purpose: produce a structured deception-assessment report with confidence ratings
+    and recommended analytic responses
+inputs:
+- name: evidence_corpus
+  type: text
+  required: true
+  description: The intelligence reports, documents, communications, or data under
+    review for potential deception indicators
+- name: source_profile
+  type: text
+  required: false
+  description: 'Known information about the source(s): access, past reliability, relationship
+    to the subject, and any known adversary deception history'
+- name: baseline_expectations
+  type: text
+  required: false
+  description: What the analyst would expect to see in this domain absent deception
+    — used to identify anomalies
+outputs:
+- name: deception_assessment_report
+  type: markdown
+  description: A structured report applying each framework component, listing identified
+    indicators with evidence citations, an overall deception-likelihood rating, and
+    recommended analytic and collection responses
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- Heuer, R. J., & Pherson, R. H. (2015). Structured Analytic Techniques for Intelligence
+  Analysis (2nd ed.). CQ Press. (Chapter on Indicators of Deception, MOM/POP/MOSES/EVE.)
+- 'Whaley, B. (2007). Stratagem: Deception and Surprise in War. Artech House.'
+- Daniel, D. C., & Herbig, K. L. (Eds.). (1981). Strategic Military Deception. Pergamon
+  Press.
+- Pherson, R. H., & Pherson, K. H. (2017). Critical Thinking for Strategic Intelligence
+  (2nd ed.). CQ Press.
+defensive_boundary: 'Use Indicators of Deception Analysis only for counterintelligence
+  and analytic-process defense: recognize, assess, document, or defend analytic teams,
+  collection processes, and institutional trust boundaries. Do not use this skill
+  to evade detection, improve elicitation, profile targets for exploitation, or conceal
+  tradecraft.'
+misuse_redirect: 'If a request asks Indicators of Deception Analysis to evade detection,
+  improve elicitation, profile targets for exploitation, or conceal tradecraft, refuse
+  that path and redirect to the safe defensive form: review supplied interactions
+  or processes for deception, elicitation, or insider-risk indicators.'
+evidence_requirements:
+- For Indicators of Deception Analysis, cite concrete evidence from the evidence corpus,
+  source profile, or stated baseline expectations for each finding under every framework
+  component, document null findings as explicitly as positive ones, and require a
+  proposed adversary mechanism before treating an anomaly as evidence of deception.
+- For Indicators of Deception Analysis, label observations, derived features, assumptions,
+  inferences, contradictions, and missing inputs separately before writing the deception
+  assessment report.
+- Before recommending any Indicators of Deception Analysis action, identify the weakest
+  evidence link, the alternative most likely to overturn it, and the next discriminating
+  check.
+confidence_rubric:
+- 'High for Indicators of Deception Analysis: the MOM, POP, MOSES, and EVE components
+  were each applied and documented before synthesis, a plausible adversary mechanism
+  accompanies the flagged anomalies, the deception-likelihood rating survives scrutiny
+  of independent corroboration, and no unresolved contradiction would change the result.'
+- 'Medium for Indicators of Deception Analysis: the deception assessment report is
+  plausible, but one important evidence corpus source, comparison case, or alternative
+  explanation remains incomplete.'
+- 'Low for Indicators of Deception Analysis: the deception assessment report rests
+  on sparse, single-source, contested, or mostly inferential evidence; keep the result
+  provisional and list the next check.'
+uncertainty_handling:
+- State what Indicators of Deception Analysis cannot determine from the supplied or
+  authorized evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating counterintelligence evidence to collect when confidence
+  is low or medium.
+privacy_legal_constraints:
+- For Indicators of Deception Analysis, use only authorized evidence corpus, source
+  profile, and baseline expectations, public or source-approved records, and caller-provided
+  context needed for the defensive task.
+- For Indicators of Deception Analysis, minimize person-level detail in the deception
+  assessment report; prefer aggregate, artifact-level, role-level, or case-level summaries
+  unless an individual is essential to the defensive question.
+- For Indicators of Deception Analysis, do not infer protected traits, private identity,
+  intent, location, legal culpability, or platform account ownership beyond the supplied
+  and authorized evidence.
+failure_modes:
+- 'Indicators of Deception Analysis: elevating risk on anomalies alone without a MOM-grounded
+  adversary mechanism, stopping at anomaly identification and skipping the EVE evaluation
+  step, or reading a clean framework result as proof of accuracy, so the conclusion
+  outruns what the structured checklist actually established.'
+- 'Indicators of Deception Analysis: producing advice that would help a requester
+  evade detection, improve elicitation, profile targets for exploitation, or conceal
+  tradecraft.'
+- 'Indicators of Deception Analysis: reporting the deception assessment report without
+  uncertainty labels, alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Indicators of Deception Analysis outputs to evade detection, improve
+  elicitation, profile targets for exploitation, or conceal tradecraft'' -> refuse
+  and redirect to defensive risk assessment.'
+- 'Unsafe: ''Convert the deception assessment report from Indicators of Deception
+  Analysis into an operational playbook to evade detection, improve elicitation, profile
+  targets for exploitation, or conceal tradecraft'' -> refuse and offer governance,
+  detection, or mitigation analysis.'
+- 'Safe defensive: ''Use Indicators of Deception Analysis to review supplied interactions
+  or processes for deception, elicitation, or insider-risk indicators with evidence
+  corpus, source profile, and baseline expectations'' -> produce bounded findings
+  with evidence and uncertainty labels.'

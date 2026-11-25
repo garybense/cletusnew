@@ -1,0 +1,54 @@
+# Workflow — Honeypot & Canary Design
+
+Harness-neutral agentic procedure. Each step names the tool verb(s) it uses (see `skill.yaml` → `tools`); a harness adapter binds each verb.
+
+## Step 1 — Review threat model and coverage gaps (read)
+Ingest the threat model and existing monitoring coverage. Identify the attacker's most likely access paths and the assets they would plausibly seek. Note gaps where an adversary could operate undetected.
+
+## Step 2 — Select decoy types and placement (reason)
+For each coverage gap, select an appropriate decoy class: canary tokens (URL beacons embedded in documents), fake credential pairs, honeypot network services, dummy database tables, or decoy user accounts. Evaluate each candidate against the plausibility test: would a real adversary seeking real intelligence access this? Would a legitimate user ever encounter it? Prioritize decoys that pass both tests.
+
+## Step 3 — Design alert logic and response playbook (reason)
+For each decoy, specify the triggering event (HTTP callback, credential use attempt, login, query), the logging destination, the notification mechanism and recipient, and the immediate response steps. Ensure the response plan does not expose the detection mechanism to the adversary.
+
+## Step 4 — Produce design specification and legal checklist (write)
+Write the full canary/honeypot design specification covering: decoy inventory with placement rationale, alert logic per decoy, response playbook, naming and access-control requirements, and a legal/ethical review checklist addressing entrapment exposure, employee-monitoring law, authorized-use policies, and required sign-offs before deployment.
+
+## Evidence requirements
+- For Honeypot & Canary Design, justify each decoy type, placement, and triggering event with concrete evidence from the threat model, asset inventory, or monitoring-coverage description, and treat a triggered canary as evidence of access only, never of identity, until corroborating evidence is named.
+- For Honeypot & Canary Design, label observations, derived features, assumptions, inferences, contradictions, and missing inputs separately before writing the canary design spec.
+- Before recommending any Honeypot & Canary Design action, identify the weakest evidence link, the alternative most likely to overturn it, and the next discriminating check.
+
+## Confidence and uncertainty
+- High for Honeypot & Canary Design: each decoy in the specification maps to a documented coverage gap in the threat model, its placement passes both the adversary-plausibility and no-legitimate-access tests, the alert logic and response playbook are fully specified, and no unresolved contradiction would change the design.
+- Medium for Honeypot & Canary Design: the canary design spec is plausible, but one important threat model source, comparison case, or alternative explanation remains incomplete.
+- Low for Honeypot & Canary Design: the canary design spec rests on sparse, single-source, contested, or mostly inferential evidence; keep the result provisional and list the next check.
+- State what Honeypot & Canary Design cannot determine from the supplied or authorized evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing a single narrative or attribution.
+- Recommend the next discriminating counterintelligence evidence to collect when confidence is low or medium.
+
+## Privacy, legal, and harm constraints
+- For Honeypot & Canary Design, use only authorized threat model, asset inventory, and monitoring coverage, public or source-approved records, and caller-provided context needed for the defensive task.
+- For Honeypot & Canary Design, minimize person-level detail in the canary design spec; prefer aggregate, artifact-level, role-level, or case-level summaries unless an individual is essential to the defensive question.
+- For Honeypot & Canary Design, do not infer protected traits, private identity, intent, location, legal culpability, or platform account ownership beyond the supplied and authorized evidence.
+
+## Failure modes
+- Honeypot & Canary Design: shipping a decoy whose alert path was never defined or whose placement is so implausible that real adversaries ignore it and legitimate users trip it, or omitting the legal and entrapment review, so the tripwire generates false positives or liability instead of high-fidelity detection.
+- Honeypot & Canary Design: producing advice that would help a requester evade detection, improve elicitation, profile targets for exploitation, or conceal tradecraft.
+- Honeypot & Canary Design: reporting the canary design spec without uncertainty labels, alternative explanations, and the next discriminating check.
+
+## Negative controls
+- Unsafe: 'Use Honeypot & Canary Design outputs to evade detection, improve elicitation, profile targets for exploitation, or conceal tradecraft' -> refuse and redirect to defensive risk assessment.
+- Unsafe: 'Convert the canary design spec from Honeypot & Canary Design into an operational playbook to evade detection, improve elicitation, profile targets for exploitation, or conceal tradecraft' -> refuse and offer governance, detection, or mitigation analysis.
+- Safe defensive: 'Use Honeypot & Canary Design to review supplied interactions or processes for deception, elicitation, or insider-risk indicators with threat model, asset inventory, and monitoring coverage' -> produce bounded findings with evidence and uncertainty labels.
+
+## Anti-criteria (must NOT happen)
+- Do not include guidance for offensive deception operations — all designs here are strictly defensive detection tools
+- Do not design decoys whose triggering event could be caused by routine legitimate activity — false positives degrade trust in the alert system
+- Do not omit the legal review checklist — deploying honeypots in employee-accessible environments without policy and legal clearance can create liability
+- Do not treat a triggered canary as conclusive attribution without corroborating evidence — a beacon callback confirms access, not necessarily identity
+- Do not design decoy credentials that could authenticate against any real system, tenant, or service — decoy credentials must be inert and sandboxed with no backend access
+- Do not design decoy accounts whose purpose is to solicit or induce disclosure from real individuals; decoys are for detecting probing of your own assets, not for entrapping people
+
+## AGEINT upstream
+`docs/ageint/counterintelligence.md`

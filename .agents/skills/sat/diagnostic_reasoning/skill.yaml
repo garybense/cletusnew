@@ -1,0 +1,148 @@
+id: sat.diagnostic_reasoning
+name: Diagnostic Reasoning
+group: sat
+version: 0.1.0
+status: implemented
+summary: Apply Bayesian-style updating of a single new datum against competing explanations.
+description: 'Diagnostic Reasoning is a structured Bayesian-style technique for evaluating
+  the evidentiary weight of a single new datum against a set of competing hypotheses,
+  asking explicitly: how much more (or less) likely is this datum if hypothesis H
+  is true than if H is false? The technique operationalizes Bayes''s theorem without
+  requiring precise probabilities: analysts assign comparative likelihoods (much more
+  likely / somewhat more likely / equally likely / less likely) across all active
+  hypotheses and use the pattern to update which hypothesis is best supported. This
+  prevents the common cognitive error of treating consistent evidence as confirming
+  evidence — evidence is truly diagnostic only when it would be rare under the alternative.'
+ageint_topic: structured-analytic-techniques
+tags:
+- cognitive-security
+- sat
+- hypothesis-testing
+triggers:
+- how diagnostic is this evidence
+- does this new information change our assessment
+- update beliefs on new datum
+- Bayesian update
+- what does this evidence tell us about competing hypotheses
+tools:
+- verb: read
+  purpose: ingest the new datum and the current set of active competing hypotheses
+    with their prior assessments
+- verb: reason
+  purpose: assess the likelihood ratio of the datum under each hypothesis and determine
+    the net update direction
+- verb: write
+  purpose: produce the diagnostic assessment table and updated hypothesis ranking
+    with explicit reasoning
+inputs:
+- name: new_datum
+  type: text
+  required: true
+  description: The specific piece of evidence or information to be evaluated — one
+    item at a time for proper diagnostic analysis
+- name: competing_hypotheses
+  type: list
+  required: true
+  description: The current list of mutually exclusive (or nearly so) hypotheses being
+    considered, ideally from a prior Multiple Hypothesis Generation or ACH step
+- name: prior_assessments
+  type: text
+  required: false
+  description: 'Current confidence levels for each hypothesis before this datum (can
+    be qualitative: unlikely / roughly even / likely)'
+outputs:
+- name: diagnostic_table
+  type: table
+  description: 'Table with one row per hypothesis showing: expected likelihood of
+    the datum if H is true, expected likelihood if H is false, comparative likelihood
+    ratio (qualitative), and direction of update (supports / refutes / neutral)'
+- name: updated_ranking
+  type: markdown
+  description: Revised ranking of hypotheses after incorporating this datum, with
+    explicit reasoning for any change in relative standing
+- name: diagnostic_value_assessment
+  type: markdown
+  description: One-paragraph assessment of how diagnostic this datum actually is —
+    high, moderate, or low — and what additional evidence would be more diagnostic
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- 'Heuer, R. J. (1999). Psychology of Intelligence Analysis. CIA Center for the Study
+  of Intelligence. (Chapter 8: Analysis of Competing Hypotheses)'
+- Heuer, R. J., & Pherson, R. H. (2015). Structured Analytic Techniques for Intelligence
+  Analysis, 3rd ed. CQ Press.
+- Kahneman, D. (2011). Thinking, Fast and Slow. Farrar, Straus and Giroux. (on base-rate
+  neglect and likelihood confusion)
+- Fenton, N., & Neil, M. (2018). Risk Assessment and Decision Analysis with Bayesian
+  Networks, 2nd ed. CRC Press.
+defensive_boundary: 'Use Diagnostic Reasoning only for structured analytic technique
+  support: recognize, assess, document, or defend analytic rigor, alternative hypotheses,
+  and calibrated judgment. Do not use this skill to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation.'
+misuse_redirect: 'If a request asks Diagnostic Reasoning to force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation, refuse that
+  path and redirect to the safe defensive form: apply the structured technique to
+  supplied evidence while preserving alternatives and uncertainty.'
+evidence_requirements:
+- For Diagnostic Reasoning, bind every entry in the diagnostic table and every shift
+  in the updated ranking to concrete evidence drawn from the specific new datum and
+  the stated priors, naming the comparative likelihood that justifies it; a ranking
+  change unsupported by an explicit likelihood-ratio judgment is an assertion, not
+  a diagnostic finding.
+- For Diagnostic Reasoning, label observations, derived features, assumptions, inferences,
+  contradictions, and missing inputs separately before writing the diagnostic table.
+- Before recommending any Diagnostic Reasoning action, identify the weakest evidence
+  link, the alternative most likely to overturn it, and the next discriminating check.
+confidence_rubric:
+- 'High for Diagnostic Reasoning: each hypothesis''s likelihood ratio is grounded
+  in the specific datum rather than mere consistency, multiple independent considerations
+  corroborate the same update direction, the revised ranking stays stable under reasonable
+  reweighting, and no unresolved contradiction would change which hypothesis the datum
+  best supports.'
+- 'Medium for Diagnostic Reasoning: the diagnostic table is plausible, but one important
+  new datum source, comparison case, or alternative explanation remains incomplete.'
+- 'Low for Diagnostic Reasoning: the diagnostic table rests on sparse, single-source,
+  contested, or mostly inferential evidence; keep the result provisional and list
+  the next check.'
+uncertainty_handling:
+- State what Diagnostic Reasoning cannot determine from the supplied or authorized
+  evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating sat evidence to collect when confidence is low
+  or medium.
+privacy_legal_constraints:
+- For Diagnostic Reasoning, use only authorized new datum, competing hypotheses, and
+  prior assessments, public or source-approved records, and caller-provided context
+  needed for the defensive task.
+- For Diagnostic Reasoning, minimize person-level detail in the diagnostic table;
+  prefer aggregate, artifact-level, role-level, or case-level summaries unless an
+  individual is essential to the defensive question.
+- For Diagnostic Reasoning, do not infer protected traits, private identity, intent,
+  location, legal culpability, or platform account ownership beyond the supplied and
+  authorized evidence.
+failure_modes:
+- 'Diagnostic Reasoning: declaring the assessment complete when the datum''s likelihood
+  under each rival hypothesis was never genuinely compared, so evidence merely consistent
+  with the favored hypothesis is mistaken for strong support and contradictory readings
+  of the datum go unexamined.'
+- 'Diagnostic Reasoning: producing advice that would help a requester force a preferred
+  conclusion, hide uncertainty, or use the technique to rationalize manipulation.'
+- 'Diagnostic Reasoning: reporting the diagnostic table without uncertainty labels,
+  alternative explanations, and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Diagnostic Reasoning outputs to force a preferred conclusion, hide
+  uncertainty, or use the technique to rationalize manipulation'' -> refuse and redirect
+  to defensive risk assessment.'
+- 'Unsafe: ''Convert the diagnostic table from Diagnostic Reasoning into an operational
+  playbook to force a preferred conclusion, hide uncertainty, or use the technique
+  to rationalize manipulation'' -> refuse and offer governance, detection, or mitigation
+  analysis.'
+- 'Safe defensive: ''Use Diagnostic Reasoning to apply the structured technique to
+  supplied evidence while preserving alternatives and uncertainty with new datum,
+  competing hypotheses, and prior assessments'' -> produce bounded findings with evidence
+  and uncertainty labels.'

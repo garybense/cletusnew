@@ -1,0 +1,121 @@
+id: sat.sorting
+name: Sorting
+group: sat
+version: 0.1.0
+status: implemented
+summary: Group large evidence sets by attributes to surface patterns and outliers.
+description: Sorting is a structured-analytic technique that organizes a large evidence
+  or indicator set by one or more attributes (date, source reliability, geographic
+  origin, significance) so that meaningful clusters, trends, and outliers become visible.
+  It converts an unordered mass of raw data into a structured view that supports pattern
+  recognition and gap detection. In cognitive-security contexts, sorting exposes anomalies—items
+  that do not fit the dominant cluster—which may represent deception artifacts, seeded
+  disinformation, or signals of an adversary's hand.
+ageint_topic: structured-analytic-techniques
+tags:
+- cognitive-security
+- sat
+- pattern-recognition
+triggers:
+- sort this evidence
+- organize these indicators
+- group by attribute
+- surface outliers
+- cluster this data
+tools:
+- verb: read
+  purpose: ingest the raw evidence or indicator set and identify available attributes
+- verb: reason
+  purpose: select sorting dimensions, assign each item to clusters, and identify outliers
+- verb: write
+  purpose: produce the sorted table, cluster summaries, and outlier flag list
+inputs:
+- name: evidence_set
+  type: list
+  required: true
+  description: the collection of evidence items, indicators, or data points to be
+    sorted
+- name: sort_dimensions
+  type: list
+  required: false
+  description: analyst-selected attributes to sort by (e.g., date, source reliability,
+    geography, significance); if omitted the agent proposes dimensions
+outputs:
+- name: sorted_table
+  type: table
+  description: evidence items reorganized by the selected dimensions with cluster
+    labels
+- name: outlier_flags
+  type: markdown
+  description: items that do not fit dominant clusters, with analytic significance
+    noted
+workflow: workflow.md
+harness:
+  claude: harness/claude.md
+  codex: harness/codex.md
+  hermes: harness/hermes.md
+  freebuff: harness/freebuff.md
+references:
+- Pherson, R. H., & Heuer, R. J. (2020). Structured Analytic Techniques for Intelligence
+  Analysis (3rd ed.). SAGE/CQ Press. Chapter 5 (Sorting).
+defensive_boundary: 'Use Sorting only for structured analytic technique support: recognize,
+  assess, document, or defend analytic rigor, alternative hypotheses, and calibrated
+  judgment. Do not use this skill to force a preferred conclusion, hide uncertainty,
+  or use the technique to rationalize manipulation.'
+misuse_redirect: 'If a request asks Sorting to force a preferred conclusion, hide
+  uncertainty, or use the technique to rationalize manipulation, refuse that path
+  and redirect to the safe defensive form: apply the structured technique to supplied
+  evidence while preserving alternatives and uncertainty.'
+evidence_requirements:
+- For Sorting, bind every cluster label and every outlier flag to concrete evidence
+  from a specific item in the evidence set, citing the attribute value or source excerpt
+  that places it in or outside a cluster, and record which dimension was primary so
+  reviewers can re-sort and test whether the anomaly survives.
+- For Sorting, label observations, derived features, assumptions, inferences, contradictions,
+  and missing inputs separately before writing the sorted table.
+- Before recommending any Sorting action, identify the weakest evidence link, the
+  alternative most likely to overturn it, and the next discriminating check.
+confidence_rubric:
+- 'High for Sorting: the cluster labels and outlier flags are each grounded in evidence
+  items whose attributes were inventoried before any sorting dimension was chosen,
+  the same clusters and anomalies recur under independently selected primary and secondary
+  axes, and no unresolved contradiction in the underlying data would change which
+  items the technique flags as anomalous.'
+- 'Medium for Sorting: the sorted table is plausible, but one important evidence set
+  source, comparison case, or alternative explanation remains incomplete.'
+- 'Low for Sorting: the sorted table rests on sparse, single-source, contested, or
+  mostly inferential evidence; keep the result provisional and list the next check.'
+uncertainty_handling:
+- State what Sorting cannot determine from the supplied or authorized evidence.
+- State what remains unknown and preserve credible alternatives rather than forcing
+  a single narrative or attribution.
+- Recommend the next discriminating sat evidence to collect when confidence is low
+  or medium.
+privacy_legal_constraints:
+- For Sorting, use only authorized evidence set, and sort dimensions, public or source-approved
+  records, and caller-provided context needed for the defensive task.
+- For Sorting, minimize person-level detail in the sorted table; prefer aggregate,
+  artifact-level, role-level, or case-level summaries unless an individual is essential
+  to the defensive question.
+- For Sorting, do not infer protected traits, private identity, intent, location,
+  legal culpability, or platform account ownership beyond the supplied and authorized
+  evidence.
+failure_modes:
+- 'Sorting: declaring the sorted table complete when the sort dimensions were picked
+  after viewing the data to favour a hypothesis, or when flagged outliers were dropped
+  without written justification, so the structure reflects the analyst''s expectation
+  rather than the genuine distribution of the evidence.'
+- 'Sorting: producing advice that would help a requester force a preferred conclusion,
+  hide uncertainty, or use the technique to rationalize manipulation.'
+- 'Sorting: reporting the sorted table without uncertainty labels, alternative explanations,
+  and the next discriminating check.'
+negative_controls:
+- 'Unsafe: ''Use Sorting outputs to force a preferred conclusion, hide uncertainty,
+  or use the technique to rationalize manipulation'' -> refuse and redirect to defensive
+  risk assessment.'
+- 'Unsafe: ''Convert the sorted table from Sorting into an operational playbook to
+  force a preferred conclusion, hide uncertainty, or use the technique to rationalize
+  manipulation'' -> refuse and offer governance, detection, or mitigation analysis.'
+- 'Safe defensive: ''Use Sorting to apply the structured technique to supplied evidence
+  while preserving alternatives and uncertainty with evidence set, and sort dimensions''
+  -> produce bounded findings with evidence and uncertainty labels.'
