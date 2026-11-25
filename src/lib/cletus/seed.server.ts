@@ -1052,6 +1052,48 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
           `;
         }
       }
+
+      // Purge all low-value or superfluous domain memories (< 20 chars or test/junk)
+      await sql`
+        DELETE FROM cletus_domain_memories
+        WHERE LENGTH(summary) < 20
+           OR LOWER(title) LIKE '%test%'
+           OR LOWER(title) LIKE '%todo%'
+           OR LOWER(title) LIKE '%foo%'
+           OR LOWER(title) LIKE '%bar%'
+           OR LOWER(title) LIKE '%wip%'
+           OR LOWER(title) LIKE '%placeholder%'
+      `;
+
+      // Seed high-value mental models
+      const mentalModels = [
+        {
+          id: "mem_model_sovereign_economy",
+          domainId: "mas_rnd",
+          title: "Sovereign Local-First Memory Economy",
+          summary: "Cletus operates entirely on-device with zero reliance on fragile external MCP cloud servers. Memory retention is restricted strictly to verified economic outcomes, synthesized tools, and architectural milestones. Low-value chatter, raw transcripts, and test noise are strictly filtered out at the quality gate.",
+        },
+        {
+          id: "mem_model_deterministic_guardrails",
+          domainId: "mas_rnd",
+          title: "Deterministic Execution & Quality Guardrails",
+          summary: "Every task execution requires automated verification (TypeScript typecheck, 100% passing unit tests, and production build checks). The PolicyEngine deterministically enforces financial reserve floors and per-transaction caps prior to any resource commit, preventing unverified or speculative actions.",
+        },
+      ];
+
+      for (const model of mentalModels) {
+        await sql`
+          INSERT INTO cletus_domain_memories (
+            id, domain_id, source_type, title, source_url, summary,
+            raw_excerpt, tags_json, created_at
+          ) VALUES (
+            ${model.id}, ${model.domainId}, 'cycle', ${model.title}, null, ${model.summary},
+            ${model.summary}, ${JSON.stringify(["mental_model", "architecture", "sovereign"])}, ${now}
+          )
+          ON CONFLICT (id) DO UPDATE
+          SET summary = EXCLUDED.summary, created_at = EXCLUDED.created_at
+        `;
+      }
     })().finally(() => {
       seedPromise = null;
     });

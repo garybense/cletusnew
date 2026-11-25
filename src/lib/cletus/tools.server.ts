@@ -2582,7 +2582,17 @@ export async function executeMasTool(
       if (typeof args.memoryTitle === "string" && args.memoryTitle.trim()) {
         const memTitle = args.memoryTitle.trim().slice(0, 160);
         const memSummary = String(args.memorySummary ?? summary).replace(/\s+/g, " ").trim().slice(0, 1200);
-        if (memSummary.length >= 5) {
+
+        const isHighValue = (t: string, s: string) => {
+          const ct = t.trim().toLowerCase();
+          const cs = s.trim().toLowerCase();
+          if (ct.length < 5 || cs.length < 20) return false;
+          const junk = ["test", "todo", "wip", "foo", "bar", "asdf", "placeholder", "untitled", "sample"];
+          if (junk.some((j) => ct === j || cs === j)) return false;
+          return true;
+        };
+
+        if (isHighValue(memTitle, memSummary)) {
           const existing = await sql<{ id: string }>`
             SELECT id FROM cletus_domain_memories
             WHERE domain_id = ${snapshot.activeDomain} AND LOWER(title) = ${memTitle.toLowerCase()}
