@@ -3113,6 +3113,16 @@ export async function executeMasTool(
       if (!cleanRec) {
         return { ok: false, error: "recommendation is required" };
       }
+      const lowerRec = cleanRec.toLowerCase();
+      if (
+        lowerRec.includes("test") ||
+        lowerRec.includes("todo") ||
+        lowerRec.includes("wip") ||
+        lowerRec.includes("placeholder") ||
+        lowerRec.length < 10
+      ) {
+        return { ok: false, error: "Rejected by Entelechy quality filter: recommendation is too short or contains superfluous test/placeholder terms." };
+      }
       const nextConfidence =
         typeof args.confidence === "number" && Number.isFinite(args.confidence)
           ? Number(Math.min(0.98, Math.max(0.35, args.confidence)).toFixed(2))
