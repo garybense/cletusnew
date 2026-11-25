@@ -2320,6 +2320,21 @@ export const MAS_TOOL_DEFINITIONS: NvidiaToolDefinition[] = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "optimize_swarm_triage",
+      description: "Swarm Optimization: Evaluate task complexity against the 60/100 threshold (> 45) for 12-Model Legion Swarm delegation and inspect state.db telemetry.",
+      parameters: {
+        type: "object",
+        properties: {
+          taskDescription: { type: "string", description: "Task description or objective." },
+          estimatedComplexity: { type: "number", description: "Optional estimated complexity score (1-100)." },
+        },
+        required: ["taskDescription"],
+      },
+    },
+  },
 ];
 
 export async function executeMasTool(
@@ -2461,6 +2476,12 @@ export async function executeMasTool(
       const { parseCallRailCredentials } = await import("./callrail-ingest");
       const creds = parseCallRailCredentials(String(args.rawContent ?? ""));
       return { ok: true, totalParsed: creds.length, sample: creds.slice(0, 10) };
+    }
+
+    case "optimize_swarm_triage": {
+      const { triageTaskComplexity } = await import("./swarm-optimization");
+      const res = triageTaskComplexity(String(args.taskDescription ?? ""), typeof args.estimatedComplexity === "number" ? args.estimatedComplexity : undefined);
+      return { ok: true, ...res };
     }
 
     case "optimize_context": {
