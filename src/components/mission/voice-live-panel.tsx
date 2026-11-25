@@ -535,6 +535,7 @@ export function VoiceLivePanel() {
           } else if (msg.type === "outputTranscript" && msg.text) {
             appendTranscript("cletus", msg.text);
             pendingOutputTranscriptRef.current = msg.text;
+            speakWithBrowserFallback(msg.text);
           } else if (msg.type === "ttsUnavailable") {
             const reason = msg.reason ?? "Server TTS unavailable; using browser speech output.";
             setTtsNotice(reason);
