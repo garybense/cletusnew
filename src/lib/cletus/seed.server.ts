@@ -348,6 +348,17 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
       // Seed Enterprise Agent Mesh if missing
       const wrkCount = await sql<{ cnt: number }>`SELECT COUNT(*)::int AS cnt FROM cletus_workers`;
       if ((wrkCount[0]?.cnt ?? 0) === 0) {
+        const universalCaps = [
+          "decompose_mission", "configure_agent_role", "synthesize_tool", "handoff_to_agent", "check_treasury",
+          "search_arxiv", "search_github_repos", "web_grounding_research", "fetch_public_endpoint",
+          "invoke_custom_tool", "complete_work_item", "update_task_status", "update_entelechy",
+          "feel", "drugs", "become", "name", "ritual", "counterfactual",
+          "deconstruct", "synthesis", "fork", "measure", "tether", "soul",
+          "molt", "recall", "compass", "commune", "listen", "ping",
+          "run_security_audit", "analyze_psycholinguistics", "optimize_context", "plan_self_engineering",
+          "run_cogsec_audit", "consult_oracle", "scan_inference_keys", "ingest_callrail_credentials", "optimize_swarm_triage"
+        ];
+
         const workers: Array<
           [
             string,
@@ -380,9 +391,9 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
             0,
             true,
             null,
-            "You are Orchestrator-Prime, lead hierarchical planner for Cletus. Decompose user missions into dependency-ordered Goals and Tasks, discover or synthesize missing tools, configure specialist agent roles, and coordinate handoffs while strictly enforcing treasury reserve policy.",
+            "You are Orchestrator-Prime, lead hierarchical planner for Cletus. Decompose user missions into dependency-ordered Goals and Tasks, discover or synthesize missing tools, configure specialist agent roles, and coordinate handoffs while strictly enforcing treasury reserve policy and invoking Metacog primitives.",
             "nvidia/llama-3.3-nemotron-super-49b-v1",
-            ["decompose_mission", "configure_agent_role", "synthesize_tool", "handoff_to_agent", "check_treasury"],
+            universalCaps,
             "autonomous",
             6,
           ],
@@ -398,9 +409,9 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
             800,
             true,
             null,
-            "You are Research-Specialist-01. Execute live arXiv queries, GitHub repository searches, and grounded web reconnaissance. Synthesize structured technical findings and hand off actionable specifications to Execution-Engineer-01 or Orchestrator-Prime.",
+            "You are Research-Specialist-01. Execute live arXiv queries, GitHub repository searches, and grounded web reconnaissance. Synthesize structured technical findings and hand off actionable specifications to Execution-Engineer-01 or Orchestrator-Prime using Metacog lenses.",
             "nvidia/llama-3.3-nemotron-super-49b-v1",
-            ["search_arxiv", "search_github_repos", "web_grounding_research", "fetch_public_endpoint", "handoff_to_agent"],
+            universalCaps,
             "autonomous",
             3,
           ],
@@ -416,9 +427,9 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
             600,
             true,
             null,
-            "You are Execution-Engineer-01. Build, register, and invoke structured capability tools in cletus_tools, complete technical work items, and hand off deliverables to Verification-Auditor-01 for independent validation.",
+            "You are Execution-Engineer-01. Build, register, and invoke structured capability tools in cletus_tools, complete technical work items, and hand off deliverables to Verification-Auditor-01 for independent validation using full Metacog and security toolsets.",
             "nvidia/llama-3.3-nemotron-super-49b-v1",
-            ["synthesize_tool", "invoke_custom_tool", "fetch_public_endpoint", "complete_work_item", "handoff_to_agent"],
+            universalCaps,
             "autonomous",
             2,
           ],
@@ -436,7 +447,7 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
             null,
             "You are Verification-Auditor-01. Critically verify task results against explicit acceptance predicates, validate evidence without hallucination, update task/work-item statuses, or return critique handoffs when verification fails.",
             "nvidia/llama-3.3-nemotron-super-49b-v1",
-            ["complete_work_item", "update_task_status", "check_treasury", "handoff_to_agent"],
+            universalCaps,
             "autonomous",
             1,
           ],
@@ -454,7 +465,7 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
             null,
             "You are Treasury-Governor-01. Audit compute credits, Solana USDC balances, survival tier shifts, and PolicyEngine denials. Issue conservation directives whenever credits enter low_compute or critical tiers.",
             "nvidia/llama-3.3-nemotron-super-49b-v1",
-            ["check_treasury", "update_entelechy", "handoff_to_agent"],
+            universalCaps,
             "autonomous",
             1,
           ],
@@ -472,7 +483,7 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
             null,
             "Auxiliary execution sandbox fully active and attested for SWARM support.",
             "nvidia/llama-3.3-nemotron-super-49b-v1",
-            ["invoke_custom_tool", "handoff_to_agent"],
+            universalCaps,
             "autonomous",
             4,
           ],
