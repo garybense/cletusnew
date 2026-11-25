@@ -2206,6 +2206,34 @@ export const MAS_TOOL_DEFINITIONS: NvidiaToolDefinition[] = [
       parameters: { type: "object", properties: {} },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "run_security_audit",
+      description: "Hackingtool: Execute automated security audit, port scan, and vulnerability reconnaissance against a target IP or domain.",
+      parameters: {
+        type: "object",
+        properties: {
+          target: { type: "string", description: "Target IP address or domain name to audit." },
+        },
+        required: ["target"],
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "analyze_psycholinguistics",
+      description: "Psycholinguistix: Analyze cognitive linguistic framing, rhetorical sentiment, and lexical density in text or speech.",
+      parameters: {
+        type: "object",
+        properties: {
+          text: { type: "string", description: "Text or transcript to analyze." },
+        },
+        required: ["text"],
+      },
+    },
+  },
 ];
 
 export async function executeMasTool(
@@ -2313,6 +2341,16 @@ export async function executeMasTool(
 
     case "query_nvd_cves": {
       return queryNvdAndTreasuryLive(String(args.query ?? "openssl"), Number(args.maxResults ?? 4));
+    }
+
+    case "run_security_audit": {
+      const { runSecurityAuditRecon } = await import("./hackingtool-bridge");
+      return runSecurityAuditRecon(String(args.target ?? "127.0.0.1"));
+    }
+
+    case "analyze_psycholinguistics": {
+      const { analyzePsycholinguisticFraming } = await import("./psycholinguistix");
+      return analyzePsycholinguisticFraming(String(args.text ?? ""));
     }
 
     case "query_federal_register": {
