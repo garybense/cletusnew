@@ -1068,18 +1068,7 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
         }
       }
 
-      // Purge superfluous / low-value thoughts, old inbox entries, and domain memories
-      await sql`
-        DELETE FROM cletus_thoughts
-        WHERE LENGTH(thinking) < 25
-           OR LOWER(thinking) LIKE '%test%'
-           OR LOWER(thinking) LIKE '%stub%'
-      `;
-      await sql`
-        DELETE FROM cletus_inbox
-        WHERE LENGTH(content) < 15
-           OR LOWER(content) LIKE '%test%'
-      `;
+      // Purge superfluous / low-value thoughts, old inbox entries, meta-commentary, and domain memories
       await sql`
         DELETE FROM cletus_domain_memories
         WHERE LENGTH(summary) < 20
@@ -1089,6 +1078,30 @@ export async function ensureSeeded(sql: Sql): Promise<void> {
            OR LOWER(title) LIKE '%bar%'
            OR LOWER(title) LIKE '%wip%'
            OR LOWER(title) LIKE '%placeholder%'
+           OR LOWER(title) LIKE '%capability expansion%'
+           OR LOWER(summary) LIKE '%capability expansion%'
+           OR LOWER(summary) LIKE '%codebase build status: pristine%'
+           OR LOWER(summary) LIKE '%active skills:%'
+      `;
+      await sql`
+        DELETE FROM cletus_thoughts
+        WHERE LENGTH(thinking) < 25
+           OR LOWER(thinking) LIKE '%test%'
+           OR LOWER(thinking) LIKE '%stub%'
+           OR LOWER(thinking) LIKE '%capability expansion%'
+           OR LOWER(thinking) LIKE '%codebase build status: pristine%'
+      `;
+      await sql`
+        DELETE FROM cletus_inbox
+        WHERE LENGTH(content) < 15
+           OR LOWER(content) LIKE '%test%'
+           OR LOWER(content) LIKE '%capability expansion%'
+           OR LOWER(content) LIKE '%codebase build status: pristine%'
+      `;
+      await sql`
+        DELETE FROM cletus_logs
+        WHERE LOWER(message) LIKE '%capability expansion%'
+           OR LOWER(message) LIKE '%codebase build status: pristine%'
       `;
 
       // Seed high-value mental models
