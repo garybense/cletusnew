@@ -201,8 +201,12 @@ export function VoiceLivePanel() {
     return { ctx, analyser };
   }, []);
 
+  const isCletusSpeakingRef = useRef(false);
+
   const speakWithBrowserFallback = useCallback(
     (text: string) => {
+      // Never use browser fallback if server audio sources are active or Cletus is speaking
+      if (activeSourcesRef.current.size > 0 || isCletusSpeakingRef.current) return;
       if (!browserTtsEnabled || typeof window === "undefined" || !("speechSynthesis" in window)) {
         return;
       }
@@ -214,6 +218,7 @@ export function VoiceLivePanel() {
         utter.rate = 1.02;
         utter.pitch = 0.96;
         utter.onstart = () => {
+          isCletusSpeakingRef.current = true;
           boundarySignalRef.current = { atMs: performance.now(), charIndex: 0 };
           setSpeaking(true);
         };
@@ -225,20 +230,28 @@ export function VoiceLivePanel() {
         };
         utter.onpause = () => setSpeaking(false);
         utter.onresume = () => {
+          isCletusSpeakingRef.current = true;
           boundarySignalRef.current = { atMs: performance.now(), charIndex: 0 };
           setSpeaking(true);
         };
-        utter.onend = () => setSpeaking(false);
-        utter.onerror = () => setSpeaking(false);
+        utter.onend = () => {
+          isCletusSpeakingRef.current = false;
+          setSpeaking(false);
+        };
+        utter.onerror = () => {
+          isCletusSpeakingRef.current = false;
+          setSpeaking(false);
+        };
         window.speechSynthesis.speak(utter);
       } catch {
-        // Ignore speech synthesis errors in restricted contexts
+        isCletusSpeakingRef.current = false;
       }
     },
     [browserTtsEnabled],
   );
 
   const stopPlaybackQueue = useCallback(() => {
+    isCletusSpeakingRef.current = false;
     for (const src of activeSourcesRef.current) {
       try {
         src.stop();
@@ -283,6 +296,15 @@ export function VoiceLivePanel() {
   );
 
   function playPcmChunk(base64Audio: string, mimeType?: string) {
+    // Cancel browser speech fallback so Cletus never speaks in two voices simultaneously
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch {
+        // Ignore
+      }
+    }
+
     const { ctx, analyser } = ensureOutputAudioPipeline();
 
     const float32 = pcm16Base64ToFloat32(base64Audio);
@@ -309,11 +331,13 @@ export function VoiceLivePanel() {
     const scheduledAt = nextStartTimeRef.current;
     nextStartTimeRef.current = scheduledAt + buffer.duration;
 
+    isCletusSpeakingRef.current = true;
     activeSourcesRef.current.add(source);
     setSpeaking(true);
     source.onended = () => {
       activeSourcesRef.current.delete(source);
       if (activeSourcesRef.current.size === 0) {
+        isCletusSpeakingRef.current = false;
         setSpeaking(false);
       }
     };
@@ -339,7 +363,7 @@ export function VoiceLivePanel() {
       rec.interimResults = false;
       rec.lang = "en-US";
       rec.onresult = (ev) => {
-        if (!liveConnectedRef.current || mutedRef.current) return;
+        if (!liveConnectedRef.current || mutedRef.current || isCletusSpeakingRef.current) return;
         const activeWs = wsRef.current;
         if (!activeWs || activeWs.readyState !== WebSocket.OPEN) return;
         let finalSegment = "";
@@ -483,7 +507,7 @@ export function VoiceLivePanel() {
       processor.connect(inputCtx.destination);
 
       processor.onaudioprocess = (event) => {
-        if (!liveConnectedRef.current || mutedRef.current || liveRecognitionShouldRunRef.current) return;
+        if (!liveConnectedRef.current || mutedRef.current || liveRecognitionShouldRunRef.current || isCletusSpeakingRef.current) return;
         const activeWs = wsRef.current;
         if (!activeWs || activeWs.readyState !== WebSocket.OPEN) return;
 
