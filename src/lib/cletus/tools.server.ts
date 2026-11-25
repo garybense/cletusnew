@@ -2581,27 +2581,44 @@ export async function executeMasTool(
       let memoryId: string | null = null;
       if (typeof args.memoryTitle === "string" && args.memoryTitle.trim()) {
         const memTitle = args.memoryTitle.trim().slice(0, 160);
-        const memSummary = String(args.memorySummary ?? summary).slice(0, 1600);
-        const rawSourceUrl = typeof args.sourceUrl === "string" ? args.sourceUrl.trim() : "";
-        const sourceUrlCheck = rawSourceUrl ? validatePublicHttpsUrl(rawSourceUrl) : null;
-        const safeSourceUrl = sourceUrlCheck && sourceUrlCheck.ok ? sourceUrlCheck.url.toString() : null;
+        const memSummary = String(args.memorySummary ?? summary).replace(/\s+/g, " ").trim().slice(0, 1200);
+        if (memSummary.length >= 5) {
+          const existing = await sql<{ id: string }>`
+            SELECT id FROM cletus_domain_memories
+            WHERE domain_id = ${snapshot.activeDomain} AND LOWER(title) = ${memTitle.toLowerCase()}
+            LIMIT 1
+          `;
 
-        let embeddingJson: string | null = null;
-        const embValues = await embedTextWithNvidia(`${memTitle}\n${memSummary}`, "passage");
-        if (embValues) {
-          embeddingJson = JSON.stringify(embValues);
+          if (existing.length > 0) {
+            memoryId = existing[0]!.id;
+            await sql`
+              UPDATE cletus_domain_memories
+              SET summary = ${memSummary}, raw_excerpt = ${summary}, created_at = ${now}
+              WHERE id = ${memoryId}
+            `;
+          } else {
+            const rawSourceUrl = typeof args.sourceUrl === "string" ? args.sourceUrl.trim() : "";
+            const sourceUrlCheck = rawSourceUrl ? validatePublicHttpsUrl(rawSourceUrl) : null;
+            const safeSourceUrl = sourceUrlCheck && sourceUrlCheck.ok ? sourceUrlCheck.url.toString() : null;
+
+            let embeddingJson: string | null = null;
+            const embValues = await embedTextWithNvidia(`${memTitle}\n${memSummary}`, "passage");
+            if (embValues) {
+              embeddingJson = JSON.stringify(embValues);
+            }
+
+            memoryId = nid("mem");
+            await sql`
+              INSERT INTO cletus_domain_memories (
+                id, domain_id, source_type, title, source_url, summary,
+                raw_excerpt, embedding_json, tags_json, created_at
+              ) VALUES (
+                ${memoryId}, ${snapshot.activeDomain}, 'cycle', ${memTitle}, ${safeSourceUrl}, ${memSummary},
+                ${summary}, ${embeddingJson}, ${JSON.stringify([slug, actionKind, ...(capabilityGained ? [capabilityGained] : [])])}, ${now}
+              )
+            `;
+          }
         }
-
-        memoryId = nid("mem");
-        await sql`
-          INSERT INTO cletus_domain_memories (
-            id, domain_id, source_type, title, source_url, summary,
-            raw_excerpt, embedding_json, tags_json, created_at
-          ) VALUES (
-            ${memoryId}, ${snapshot.activeDomain}, 'cycle', ${memTitle}, ${safeSourceUrl}, ${memSummary},
-            ${summary}, ${embeddingJson}, ${JSON.stringify([slug, actionKind, ...(capabilityGained ? [capabilityGained] : [])])}, ${now}
-          )
-        `;
       }
 
       await sql`
@@ -2624,8 +2641,11 @@ export async function executeMasTool(
     }
 
     case "evolve_entelechy_capsule": {
-      const recommendation = String(args.recommendation || "").trim().slice(0, 600);
-      if (!recommendation) {
+      const cleanRec = String(args.recommendation || "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .slice(0, 400);
+      if (!cleanRec) {
         return { ok: false, error: "recommendation is required" };
       }
       const nextConfidence =
@@ -2633,10 +2653,22 @@ export async function executeMasTool(
           ? Number(Math.min(0.98, Math.max(0.35, args.confidence)).toFixed(2))
           : snapshot.entelechy.confidence;
       const nextPriorities = Array.isArray(args.priorities)
-        ? args.priorities.map(String).filter(Boolean).slice(0, 5)
+        ? Array.from(
+            new Set(
+              args.priorities
+                .map((p) => String(p).replace(/\s+/g, " ").trim())
+                .filter((p) => p.length >= 3),
+            ),
+          ).slice(0, 5)
         : snapshot.entelechy.priorities;
       const nextAvoid = Array.isArray(args.avoid)
-        ? args.avoid.map(String).filter(Boolean).slice(0, 5)
+        ? Array.from(
+            new Set(
+              args.avoid
+                .map((a) => String(a).replace(/\s+/g, " ").trim())
+                .filter((a) => a.length >= 3),
+            ),
+          ).slice(0, 5)
         : snapshot.entelechy.avoid;
 
       await sql`
@@ -2644,7 +2676,7 @@ export async function executeMasTool(
         SET confidence = ${nextConfidence},
             priorities = ${JSON.stringify(nextPriorities)},
             avoid = ${JSON.stringify(nextAvoid)},
-            recommendation = ${recommendation}
+            recommendation = ${cleanRec}
         WHERE id = 1
       `;
 
@@ -2652,7 +2684,7 @@ export async function executeMasTool(
         INSERT INTO cletus_logs (id, at, level, source, message)
         VALUES (${nid("log")}, ${now}, 'info', 'evolution', ${`${actorName} refined Entelechy capsule (conf ${nextConfidence.toFixed(2)})`})
       `;
-      return { ok: true, confidence: nextConfidence, recommendation };
+      return { ok: true, confidence: nextConfidence, recommendation: cleanRec };
     }
 
     default:
