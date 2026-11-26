@@ -3175,6 +3175,10 @@ export async function executeMasTool(
       if (!cleanRec) {
         return { ok: false, error: "recommendation is required" };
       }
+      const { shouldDiscardLogOrMemory } = await import("./memory-sanitizer");
+      if (shouldDiscardLogOrMemory(cleanRec)) {
+        return { ok: false, error: "Rejected by Entelechy quality filter: memory contains prohibited fluff, meta-commentary, or system notices." };
+      }
       const lowerRec = cleanRec.toLowerCase();
       if (
         lowerRec.includes("test") ||
