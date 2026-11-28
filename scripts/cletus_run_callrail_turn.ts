@@ -1,6 +1,7 @@
 /**
  * Execute Cletus MAS Agent Cycle for CallRail 4,567 Credential Audit
  */
+import "dotenv/config";
 import { getSql } from "@/lib/db";
 import { runCletusAgentTurn } from "@/lib/cletus/agent-runner.server";
 
